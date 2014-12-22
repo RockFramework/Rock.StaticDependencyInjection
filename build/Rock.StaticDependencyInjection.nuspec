@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Rock.StaticDependencyInjection</id>
+        <version></version>
+        <title>Rock.StaticDependencyInjection</title>
+        <authors>Brian Friesen</authors>
+        <owners>Brian Friesen</owners>
+        <licenseUrl>https://github.com/RockFramework/Rock.StaticDependencyInjection/blob/master/license.txt</licenseUrl>
+        <projectUrl>https://github.com/RockFramework/Rock.StaticDependencyInjection</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <developmentDependency>true</developmentDependency>
+        <description>Magic. Unicorns. Static dependency injection.</description>
+        <summary>Magic. Unicorns. Static dependency injection.</summary>
+        <tags>magic unicorns static dependency injection</tags>
+    </metadata>
+    <files>
+        <file src="..\..\lib\InjectModuleInitializer.exe" target="tools\InjectModuleInitializer.exe" />
+        <file src="tools\install.ps1" target="tools\install.ps1" />
+        <file src="tools\uninstall.ps1" target="tools\uninstall.ps1" />
+    </files>
+</package>
