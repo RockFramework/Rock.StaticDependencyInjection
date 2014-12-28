@@ -49,15 +49,15 @@ namespace Rock.StaticDependencyInjection
             get { return _directoryPaths; }
             set
             {
-                _directoryPaths = 
-                    (value != null
+                _directoryPaths =
+                    value != null
                         ? value.OrderBy(x => x).ToArray()
-                        : GetDefaultDirectoryPaths());
+                        : GetDefaultDirectoryPaths();
             }
         }
 
         /// <summary>
-        /// Returns a single element: the value returned by
+        /// Returns an array containing a single element: the value returned by
         /// AppDomain.CurrentDomain.BaseDirectory.
         /// </summary>
         private static string[] GetDefaultDirectoryPaths()
