@@ -5,11 +5,15 @@ using System.Reflection;
 
 namespace Rock.StaticDependencyInjection
 {
-    internal partial class CompositionRoot
+    internal partial class CompositionRoot : CompositionRootBase
     {
         public override void Bootstrap()
         {
-            // TODO: Add calls to the various Import methods.
+            // This method is used to bootstrap the static dependencies of your
+            // library. To do this, call the various import methods of this class:
+            //  - ImportSingle
+            //  - ImportFirst
+            //  - ImportMultiple
             // Rock.StaticDependencyInjection: BEGIN EXAMPLE
             // You can import a single instance of the specified type.
             ImportSingle<IFoo>(foo => Foo.Current = foo);
@@ -36,8 +40,20 @@ namespace Rock.StaticDependencyInjection
             // Rock.StaticDependencyInjection: END EXAMPLE
         }
 
+        /// <summary>
+        /// Return a metadata object that describes the export operation for a type.
+        /// </summary>
+        /// <param name="type">The type to get export metadata.</param>
+        /// <returns>A metadata object that describes an export operation.</returns>
         protected override ExportInfo GetExportInfo(Type type)
         {
+            // Modify this method if your library needs to support a different
+            // export mechanism (possibly a different attribute) that inspects
+            // the type of a class.
+            //
+            // Remove this method if your library should not support any advanced
+            // export mechanisms based on the type of a class.
+
             var attribute = Attribute.GetCustomAttribute(type, typeof(ExportAttribute)) as ExportAttribute;
 
             if (attribute == null)
@@ -53,11 +69,26 @@ namespace Rock.StaticDependencyInjection
                 };
         }
 
+        /// <summary>
+        /// Return a collection of metadata objects that correspond to the attributes.
+        /// Use the <see cref="Extensions.AsAttributeType{TAttribute}"/> extension method
+        /// to convert applicable CustomAttributeData objects to the desired attribyte type.
+        /// </summary>
+        /// <param name="assemblyAttributeDataCollection">
+        /// The collection of attribute data describing attributes that decorate an assembly.
+        /// </param>
+        /// <returns>A collection of metadata objects that describe export operations.</returns>
         protected override IEnumerable<ExportInfo> GetExportInfos(
-            IEnumerable<CustomAttributeData> assemblyAttributes)
+            IEnumerable<CustomAttributeData> assemblyAttributeDataCollection)
         {
+            // Modify this method if your library needs to support a different
+            // export mechanism that inspects assembly attributes.
+            // 
+            // Remove this method if your library should not support using
+            // assembly attributes as an export mechanism.
+
             return
-                assemblyAttributes.AsAttributeType<ExportExternalAttribute>()
+                assemblyAttributeDataCollection.AsAttributeType<ExportExternalAttribute>()
                     .Where(attribute => attribute.ClassType.IsClass)
                     .Select(attribute =>
                         new ExportInfo(attribute.ClassType, attribute.Priority)

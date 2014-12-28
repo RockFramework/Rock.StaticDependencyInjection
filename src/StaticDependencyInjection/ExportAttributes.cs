@@ -1,4 +1,10 @@
-﻿using System;
+﻿// The attributes defined in this file are not required by
+// Rock.StaticDependencyInjection. However, they are used by the default implementation
+// of CompositionRoot. If that class's GetExportInfo or GetExportInfos methods are
+// changed or removed, then the corresponding attribute in this file can (and probably
+// should be) removed.
+
+using System;
 
 namespace Rock.StaticDependencyInjection
 {

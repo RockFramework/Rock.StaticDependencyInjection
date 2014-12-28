@@ -41,12 +41,12 @@ namespace Rock.StaticDependencyInjection
         /// Use the <see cref="Extensions.AsAttributeType{TAttribute}"/> extension method
         /// to convert applicable CustomAttributeData objects to the desired attribyte type.
         /// </summary>
-        /// <param name="assemblyAttributes">
+        /// <param name="assemblyAttributeDataCollection">
         /// The collection of attribute data describing attributes that decorate an assembly.
         /// </param>
         /// <returns>A collection of metadata objects that describe export operations.</returns>
         protected virtual IEnumerable<ExportInfo> GetExportInfos(
-            IEnumerable<CustomAttributeData> assemblyAttributes)
+            IEnumerable<CustomAttributeData> assemblyAttributeDataCollection)
         {
             yield break;
         }
