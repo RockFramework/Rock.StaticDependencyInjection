@@ -464,7 +464,8 @@ namespace Rock.StaticDependencyInjection
                     .Concat(
                         LoadExportInfosFromAssemblyAttributes(
                             import.TargetType,
-                            import.Options.DirectoryPaths))
+                            import.Options.DirectoryPaths,
+                            import.Options.IncludeTypesFromThisAssembly))
                     .Where(export =>
                         export != null
                         && !export.Disabled
@@ -534,7 +535,8 @@ namespace Rock.StaticDependencyInjection
 
         private IEnumerable<ExportInfo> LoadExportInfosFromAssemblyAttributes(
             Type targetType,
-            IEnumerable<string> directoryPaths)
+            IEnumerable<string> directoryPaths,
+            bool includeTypesFromThisAssembly)
         {
             try
             {
@@ -543,7 +545,7 @@ namespace Rock.StaticDependencyInjection
                 return
                     GetAssemblyFiles(directoryPaths)
                         .SelectMany(assemblyFile =>
-                            LoadExportInfos(assemblyFile, targetType))
+                            LoadExportInfos(assemblyFile, targetType, includeTypesFromThisAssembly))
                         .ToList();
             }
             finally
@@ -552,14 +554,17 @@ namespace Rock.StaticDependencyInjection
             }
         }
 
-        private IEnumerable<ExportInfo> LoadExportInfos(string assemblyFile, Type targetType)
+        private IEnumerable<ExportInfo> LoadExportInfos(
+            string assemblyFile,
+            Type targetType,
+            bool includeTypesFromThisAssembly)
         {
             try
             {
                 var assembly = Assembly.ReflectionOnlyLoadFrom(assemblyFile);
 
-                // Don't look here.
-                if (assembly.FullName == typeof(CompositionRootBase).Assembly.FullName)
+                if (!includeTypesFromThisAssembly
+                    && assembly.FullName == typeof(CompositionRootBase).Assembly.FullName)
                 {
                     return Enumerable.Empty<ExportInfo>();
                 }
