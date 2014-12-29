@@ -88,7 +88,7 @@ With that one line of code, the static dependency injection mechanism will find 
 
 This ability to discover implementations of dependencies enables another neat pattern. What if an organization takes advantage of internal nuget packages for distribution of core modules of some sort? If one of these internal nuget packages depends on your library, then the libraries in that internal nuget package can define the dependencies for your library. As a result, by merely taking a nuget dependency on their internal nuget package, applications will be properly configured with the right dependency for their organization.
 
-Entry Point Creation
-====================
+About InjectModuleInitializer
+=============================
 
 Many thanks to Einar Egilsson for his excellent [module initialization mechanism](http://einaregilsson.com/module-initializers-in-csharp/). Rock.StaticDependencyInjection uses it to initiate static dependency injection when a library's assembly is loaded for the first time. Einar's InjectModuleInitializer project is hosted on [github](https://github.com/einaregilsson/InjectModuleInitializer) and is available via [nuget](https://www.nuget.org/packages/InjectModuleInitializer/).
