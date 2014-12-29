@@ -99,5 +99,15 @@ namespace Rock.StaticDependencyInjection
         /// this value to filter eligible results.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is valid as an assembly attribute.
+        /// Returns true if <see cref="ClassType"/> is not null and describes a class (e.g.
+        /// not an interface or enum). Else, false.
+        /// </summary>
+        internal bool IsValidForAssemblyAttribute
+        {
+            get { return ClassType != null && ClassType.IsClass; }
+        }
     }
 }

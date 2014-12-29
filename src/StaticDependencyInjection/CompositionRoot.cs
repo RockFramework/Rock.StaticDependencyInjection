@@ -89,7 +89,7 @@ namespace Rock.StaticDependencyInjection
 
             return
                 assemblyAttributeDataCollection.AsAttributes<ExportExternalAttribute>()
-                    .Where(attribute => attribute.ClassType.IsClass)
+                    .Where(attribute => attribute.IsValidForAssemblyAttribute)
                     .Select(attribute =>
                         new ExportInfo(attribute.ClassType, attribute.Priority)
                         {
