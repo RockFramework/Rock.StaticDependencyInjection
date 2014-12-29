@@ -39,8 +39,12 @@ $relativePath = Get-Relative-Path $project.FileName $toolsPath
 Add-Type -AssemblyName 'Microsoft.Build, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'
 $buildProject = [Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection.GetLoadedProjects($project.FullName) | Select-Object -First 1
 
+$property = $buildProject.Xml.AddProperty("UseInjectModuleInitializer", "true")
+$property.Condition = "'`$(UseInjectModuleInitializer)' == ''"
+
 $target = $buildProject.Xml.AddTarget("InjectModuleInitializer")
 $target.AfterTargets = "AfterBuild"
+$target.Condition = "'`$(UseInjectModuleInitializer)' == 'true'"
 $task = $target.AddTask("Exec")
 $task.SetParameter("Command", $relativePath + "InjectModuleInitializer.exe `"`$(TargetPath)`"")
 

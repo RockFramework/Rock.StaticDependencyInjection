@@ -4,6 +4,20 @@ Add-Type -AssemblyName 'Microsoft.Build, Version=4.0.0.0, Culture=neutral, Publi
 $buildProject = [Microsoft.Build.Evaluation.ProjectCollection]::GlobalProjectCollection.GetLoadedProjects($project.FullName) | Select-Object -First 1
 $projectRoot = $buildProject.Xml;
 
+foreach ($propertyGroup in $projectRoot.PropertyGroups)
+{
+    if ($propertyGroup.Condition -eq "")
+    {
+        foreach ($property in $propertyGroup.Children)
+        {
+            if ($property.Name -eq "UseInjectModuleInitializer")
+            {
+                $propertyGroup.RemoveChild($property);
+            }
+        }
+    }
+}
+
 foreach ($target in $projectRoot.Targets)
 {
 	if ($target.Name -eq "InjectModuleInitializer")
