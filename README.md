@@ -7,67 +7,67 @@ Rock.StaticDependencyInjection also provides an api for *static* dependency inje
 
 Let's say you a widget library. And this is what a widget looks like, along with its dependency's interface.
 
-``` C#
-    
-    public class Widget
-    {
-        private readonly IFoo _foo;
-        
-        public Widget(IFoo foo = null)
-        {
-            _foo = foo ?? Foo.Current;
-        }
-        
-        public void ReportDependencies()
-        {
-            Console.WriteLine("IFoo: {0}", _foo);
-        }
-    }
+```csharp
 
-    public interface IFoo
+public class Widget
+{
+    private readonly IFoo _foo;
+    
+    public Widget(IFoo foo = null)
     {
+        _foo = foo ?? Foo.Current;
     }
     
+    public void ReportDependencies()
+    {
+        Console.WriteLine("IFoo: {0}", _foo);
+    }
+}
+
+public interface IFoo
+{
+}
+
 ```
     
 There are a few interesting things about this `Widget` class. First, it has an *optional* dependency on the `IFoo` interface - if not provided, the value of the `foo` parameter defaults to null. Second, if that foo parameter is indeed null, it uses `Foo.Current` as its value. Here are the rest of the classes in this example.
 
-``` C#
-    
-    public static class Foo
-    {
-        static Foo()
-        {
-            Current = new DefaultFoo();
-        }
+```csharp
 
-        public static IFoo Current { internal get; set; }
+public static class Foo
+{
+    static Foo()
+    {
+        Current = new DefaultFoo();
     }
 
-    public class DefaultFoo : IFoo
-    {
-    }
-    
+    public static IFoo Current { internal get; set; }
+}
+
+public class DefaultFoo : IFoo
+{
+}
+
 ```
 
 `Foo.Current` is the static dependency. It provides a fall-back `IFoo` value for `Widget` to use if one was not explicitly provided. While this is dangerously close to the Service Locator anti-pattern, I give it a pass here for two reasons. First, the getter is internal, making the Current property unusable outside of the library, making it not exactly the Service Locator pattern. And second, because there is a statically-accessible default value, the API of our library improves. Consumers of the `Widget` class don't need to pass an instance of `IFoo` to its constructor if they are ok with using the value from `Foo.Current` instead. This is a huge win for library APIs.
 
 Here's how an application can customize the value of `Foo.Current`. Pretty simple and straightforward.
 
-``` C#
-    
-    class Program
+```csharp
+
+class Program
+{
+    static void Main()
     {
-        static void Main()
-        {
-            Foo.Current = new SpecialFoo();
-        }
+        Foo.Current = new SpecialFoo();
     }
-    
-    public class SpecialFoo : IFoo
-    {
-    }
-    
+}
+
+public class SpecialFoo : IFoo
+{
+}
+
 ```
 
 However, this pattern falls short. It requires that an application that consumes this library will have to explicitly specify, at its composition root, the implementation of IFoo to use. 
