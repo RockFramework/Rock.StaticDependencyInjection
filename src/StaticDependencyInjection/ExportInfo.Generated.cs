@@ -31,6 +31,11 @@ namespace Rock.StaticDependencyInjection
         /// </param>
         internal ExportInfo(Type targetClass, int priority)
         {
+            if (targetClass == null)
+            {
+                throw new ArgumentNullException("targetClass");
+            }
+
             if (targetClass.Assembly.ReflectionOnly)
             {
                 targetClass = Type.GetType(targetClass.AssemblyQualifiedName);
