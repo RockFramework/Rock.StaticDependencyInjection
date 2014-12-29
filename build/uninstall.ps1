@@ -6,7 +6,7 @@ $projectRoot = $buildProject.Xml;
 
 foreach ($target in $projectRoot.Targets)
 {
-	if (($target.Name -eq "StaticDependencyInjection.Generated")
+	if ($target.Name -eq "InjectModuleInitializer")
 	{
 		$projectRoot.RemoveChild($target);
 	}
