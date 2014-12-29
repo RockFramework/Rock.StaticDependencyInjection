@@ -38,7 +38,7 @@ namespace Rock.StaticDependencyInjection
 
         /// <summary>
         /// Return a collection of metadata objects that correspond to the attributes.
-        /// Use the <see cref="Extensions.AsAttributeType{TAttribute}"/> extension method
+        /// Use the <see cref="Extensions.AsAttributes{TAttribute}"/> extension method
         /// to convert applicable CustomAttributeData objects to the desired attribyte type.
         /// </summary>
         /// <param name="assemblyAttributeDataCollection">

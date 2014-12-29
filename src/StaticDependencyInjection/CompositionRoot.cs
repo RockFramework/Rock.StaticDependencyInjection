@@ -71,7 +71,7 @@ namespace Rock.StaticDependencyInjection
 
         /// <summary>
         /// Return a collection of metadata objects that correspond to the attributes.
-        /// Use the <see cref="Extensions.AsAttributeType{TAttribute}"/> extension method
+        /// Use the <see cref="Extensions.AsAttributes{TAttribute}"/> extension method
         /// to convert applicable CustomAttributeData objects to the desired attribyte type.
         /// </summary>
         /// <param name="assemblyAttributeDataCollection">
@@ -88,7 +88,7 @@ namespace Rock.StaticDependencyInjection
             // assembly attributes as an export mechanism.
 
             return
-                assemblyAttributeDataCollection.AsAttributeType<ExportExternalAttribute>()
+                assemblyAttributeDataCollection.AsAttributes<ExportExternalAttribute>()
                     .Where(attribute => attribute.ClassType.IsClass)
                     .Select(attribute =>
                         new ExportInfo(attribute.ClassType, attribute.Priority)

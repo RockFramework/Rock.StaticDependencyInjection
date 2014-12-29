@@ -7,7 +7,7 @@ namespace Rock.StaticDependencyInjection
 {
     internal static class Extensions
     {
-        internal static IEnumerable<TAttribute> AsAttributeType<TAttribute>(
+        internal static IEnumerable<TAttribute> AsAttributes<TAttribute>(
             this IEnumerable<CustomAttributeData> attributeDataCollection)
             where TAttribute : Attribute
         {
