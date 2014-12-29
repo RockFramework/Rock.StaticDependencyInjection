@@ -20,7 +20,7 @@ public class Widget
     
     public void ReportDependencies()
     {
-        Console.WriteLine("IFoo: {0}", _foo);
+        Console.WriteLine("_foo: {0}", _foo.GetType().Name);
     }
 }
 
@@ -50,7 +50,7 @@ public class DefaultFoo : IFoo
 
 ```
 
-`Foo.Current` is the static dependency. It provides a fall-back `IFoo` value for `Widget` to use if one was not explicitly provided. While this is dangerously close to the Service Locator anti-pattern, I give it a pass here for two reasons. First, the getter is internal, making the Current property unusable outside of the library, making it not exactly the Service Locator pattern. And second, because there is a statically-accessible default value, the API of our library improves. Consumers of the `Widget` class don't need to pass an instance of `IFoo` to its constructor if they are ok with using the value from `Foo.Current` instead. This is a huge win for library APIs.
+`Foo.Current` is the static dependency. It provides a fallback `IFoo` value for `Widget` to use if one was not explicitly provided. While this is dangerously close to the Service Locator anti-pattern, I give it a pass here for two reasons. First, the getter is internal, making the Current property unusable outside of the library. This clearly expresses its intent: you are welcome to set this value, but its value is for internal use only. Secondly: because there is a statically-accessible default value, the API of our library improves. Consumers of the `Widget` class don't need to pass an instance of `IFoo` to its constructor if they are ok with using the value from `Foo.Current` instead. This is a huge win for library APIs.
 
 Here's how an application can customize the value of `Foo.Current`. Pretty simple and straightforward.
 
@@ -61,6 +61,18 @@ class Program
     static void Main()
     {
         Foo.Current = new SpecialFoo();
+        RunApplication();
+    }
+    
+    void RunApplication()
+    {
+        // Note that we don't pass an instance of IFoo to the Widget's constructor.
+        // The widget will get its IFoo from Foo.Current.
+        var widget = new Widget();
+        
+        // Because we set Foo.Current, this will display: "_foo: SpecialFoo".
+        // If we hadn't set Foo.Current, this would display: "_foo: DefaultFoo".
+        widget.ReportDependencies();
     }
 }
 
@@ -70,7 +82,7 @@ public class SpecialFoo : IFoo
 
 ```
 
-However, this pattern falls short. It requires that an application that consumes this library will have to explicitly specify, at its composition root, the implementation of IFoo to use. 
+However, while this pattern is good, it fails to be great. It requires that all applications that consume this library will have to explicitly specify, at its composition root, the implementation of IFoo to use.
 
 Wouldn't it be great if, just by declaring a single implementation of `IFoo`, that implementation would be used? So that the application wouldn't need to add `Foo.Current = new SpecialFoo();` to their composition root? What if that could be done automatically using some sort of convention?
 
