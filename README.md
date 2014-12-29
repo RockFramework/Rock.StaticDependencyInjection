@@ -5,7 +5,7 @@ Rock.StaticDependencyInjection is a dependency injection mechanism intended to b
 
 Rock.StaticDependencyInjection also provides an api for *static* dependency injection. Most DI containers work via the concepts of constructor injection or property injection. These mechanisms rely on the creation and modification of objects. But what if you have a static dependency? And just what do I mean by a static dependency?
 
-Let's say you a widget library. And this is what a widget looks like, along with its dependency's interface.
+Let's say you own a widget library. And this is what a widget looks like, along with its dependency's interface.
 
 ```csharp
 
@@ -76,7 +76,17 @@ Wouldn't it be great if, just by declaring a single implementation of `IFoo`, th
 
 Rock.StaticDependencyInjection allows you to do just that. You simply add a nuget package to your library, add a few lines of code, and your library will automatically discover and set the static dependencies that it requires with no intervention from the applications that use it.
 
-This ability enables another neat pattern. What if an organization takes advantage of internal nuget packages for distribution of core modules of some sort? If one of these internal nuget packages depends on your library, then the libraries in that internal nuget package can define the dependencies for your library. As a result, by merely taking a nuget dependency on their internal nuget package, applications will be properly configured with the right dependency for their organization.
+This is what composition root of your widget library might look like.
+
+```csharp
+
+ImportSingle<IFoo>(foo => Foo.Current = foo); // Yep, this is it.
+
+```
+
+With that one line of code, the static dependency injection mechanism will find the "best" implementation of `IFoo`, create an instance of it, and pass that instance to the lambda expression, `foo => Foo.Current = foo`. There are also many ways of customizing this process, including prioritizing one class over another, specifying the path(s) in which to search for assemblies with implementations of dependencies, and using named import/export pairs.
+
+This ability to discover implementations of dependencies enables another neat pattern. What if an organization takes advantage of internal nuget packages for distribution of core modules of some sort? If one of these internal nuget packages depends on your library, then the libraries in that internal nuget package can define the dependencies for your library. As a result, by merely taking a nuget dependency on their internal nuget package, applications will be properly configured with the right dependency for their organization.
 
 Entry Point Creation
 ====================
