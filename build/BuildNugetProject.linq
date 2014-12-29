@@ -103,7 +103,7 @@ private static FileTemplate GetGeneratedFileTemplate(string directory)
 
 {0}
 
-namespace $rootnamespace$.StaticDependencyInjection
+namespace $rootnamespace$.Rock.StaticDependencyInjection
 {{{1}
 }}",
     string.Join("\r\n", usings.OrderBy(x => x, NamespaceComparer.Instance)),
@@ -148,7 +148,7 @@ private static IEnumerable<FileTemplate> GetNonGeneratedFileTemplates(string dir
                 {
                     if (line == "namespace Rock.StaticDependencyInjection")
                     {
-                        contents.AppendLine("namespace $rootnamespace$.StaticDependencyInjection");
+                        contents.AppendLine("namespace $rootnamespace$.Rock.StaticDependencyInjection");
                     }
                     else
                     {
@@ -169,7 +169,7 @@ private static IEnumerable<FileTemplate> GetNonGeneratedFileTemplates(string dir
 
 private static void WriteContentFiles(string contentDir, FileTemplate generatedFileTemplate, IEnumerable<FileTemplate> nonGeneratedFileTemplates)
 {
-    var staticDependencyInjection = Path.Combine(contentDir, "StaticDependencyInjection");
+    var staticDependencyInjection = Path.Combine(contentDir, "Rock.StaticDependencyInjection");
 
     Directory.CreateDirectory(staticDependencyInjection);
 
@@ -233,7 +233,7 @@ private class FileTemplate
     
     public XElement GetXElement(string xsd)
     {
-        var value = string.Format(@"content\StaticDependencyInjection\{0}", Name);
+        var value = string.Format(@"content\Rock.StaticDependencyInjection\{0}", Name);
 
         return
             new XElement(XName.Get("file", xsd),
