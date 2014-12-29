@@ -161,21 +161,15 @@ namespace Rock.StaticDependencyInjection
         /// The import options to use. If null or not provided, the value returned by 
         /// <see cref="GetDefaultImportOptions"/> is returned.
         /// </param>
-        /// <param name="exportComparer">
-        /// A comparer to be used when more than one ExportInfo has the same priority.
-        /// If null or not provided, a comparer based on the assembly qualified name of
-        /// the target class is used.
-        /// </param>
         protected void ImportFirst<TTargetType>(
             Action<TTargetType> importAction,
             string importName = null,
-            ImportOptions options = null,
-            IComparer<ExportInfo> exportComparer = null)
+            ImportOptions options = null)
             where TTargetType : class
         {
             ImportFirstType(
                 importAction,
-                GetInstances<TTargetType>(importName, options, exportComparer));
+                GetInstances<TTargetType>(importName, options));
         }
 
         /// <summary>
@@ -212,23 +206,17 @@ namespace Rock.StaticDependencyInjection
         /// The import options to use. If null or not provided, the value returned by 
         /// <see cref="GetDefaultImportOptions"/> is returned.
         /// </param>
-        /// <param name="exportComparer">
-        /// A comparer to be used when more than one ExportInfo has the same priority.
-        /// If null or not provided, a comparer based on the assembly qualified name of
-        /// the target class is used.
-        /// </param>
         protected void ImportFirst<TTargetType, TFactoryType>(
             Action<TTargetType> importAction,
             Func<TFactoryType, TTargetType> getTarget,
             string importName = null,
-            ImportOptions options = null,
-            IComparer<ExportInfo> exportComparer = null)
+            ImportOptions options = null)
             where TTargetType : class
             where TFactoryType : class
         {
             ImportFirstType(
                 importAction,
-                GetInstances(getTarget, importName, options, exportComparer));
+                GetInstances(getTarget, importName, options));
         }
 
         /// <summary>
@@ -253,19 +241,13 @@ namespace Rock.StaticDependencyInjection
         /// The import options to use. If null or not provided, the value returned by 
         /// <see cref="GetDefaultImportOptions"/> is returned.
         /// </param>
-        /// <param name="exportComparer">
-        /// A comparer to be used when more than one ExportInfo has the same priority.
-        /// If null or not provided, a comparer based on the assembly qualified name of
-        /// the target class is used.
-        /// </param>
         protected void ImportMultiple<TTargetType>(
             Action<IEnumerable<TTargetType>> importAction,
             string importName = null,
-            ImportOptions options = null,
-            IComparer<ExportInfo> exportComparer = null)
+            ImportOptions options = null)
             where TTargetType : class
         {
-            importAction(GetInstances<TTargetType>(importName, options, exportComparer).ToList());
+            importAction(GetInstances<TTargetType>(importName, options).ToList());
         }
 
         /// <summary>
@@ -304,40 +286,31 @@ namespace Rock.StaticDependencyInjection
         /// The import options to use. If null or not provided, the value returned by 
         /// <see cref="GetDefaultImportOptions"/> is returned.
         /// </param>
-        /// <param name="exportComparer">
-        /// A comparer to be used when more than one ExportInfo has the same priority.
-        /// If null or not provided, a comparer based on the assembly qualified name of
-        /// the target class is used.
-        /// </param>
         protected void ImportMultiple<TTargetType, TFactoryType>(
             Action<IEnumerable<TTargetType>> importAction,
             Func<TFactoryType, TTargetType> getTarget,
             string importName = null,
-            ImportOptions options = null,
-            IComparer<ExportInfo> exportComparer = null)
+            ImportOptions options = null)
             where TTargetType : class
             where TFactoryType : class
         {
-            importAction(GetInstances(getTarget, importName, options, exportComparer).ToList());
+            importAction(GetInstances(getTarget, importName, options).ToList());
         }
 
         private IEnumerable<TTargetType> GetInstances<TTargetType>(
             string importName,
-            ImportOptions options,
-            IComparer<ExportInfo> exportComparer)
+            ImportOptions options)
             where TTargetType : class
         {
             return GetInstances(
                 GetImportInfo<TTargetType>(importName, options),
-                CreateInstance<TTargetType>,
-                exportComparer);
+                CreateInstance<TTargetType>);
         }
 
         private IEnumerable<TTargetType> GetInstances<TTargetType, TFactoryType>(
             Func<TFactoryType, TTargetType> getTarget,
             string importName,
-            ImportOptions options,
-            IComparer<ExportInfo> exportComparer)
+            ImportOptions options)
             where TTargetType : class
             where TFactoryType : class
         {
@@ -346,8 +319,7 @@ namespace Rock.StaticDependencyInjection
                     importName,
                     options,
                     typeof(TFactoryType)),
-                type => CreateInstance(type, getTarget),
-                exportComparer);
+                type => CreateInstance(type, getTarget));
         }
 
         private ImportInfo GetImportInfo<TTargetType>(
@@ -398,8 +370,7 @@ namespace Rock.StaticDependencyInjection
 
         private IEnumerable<TTargetType> GetInstances<TTargetType>(
             ImportInfo import,
-            Func<Type, TTargetType> createInstance,
-            IComparer<ExportInfo> exportComparer)
+            Func<Type, TTargetType> createInstance)
             where TTargetType : class
         {
             var candidateTypeNames = GetCandidateTypeNames(import);
@@ -407,8 +378,7 @@ namespace Rock.StaticDependencyInjection
             var prioritizedGroupsOfCandidateTypes =
                 GetPrioritizedGroupsOfCandidateTypes(
                     candidateTypeNames,
-                    import,
-                    exportComparer);
+                    import);
 
             return (
                 from candidateTypes in prioritizedGroupsOfCandidateTypes
@@ -487,13 +457,8 @@ namespace Rock.StaticDependencyInjection
 
         private IEnumerable<IList<Type>> GetPrioritizedGroupsOfCandidateTypes(
             IEnumerable<string> candidateTypeNames,
-            ImportInfo import,
-            IComparer<ExportInfo> exportComparer = null)
+            ImportInfo import)
         {
-            exportComparer =
-                exportComparer
-                    ?? new TargetClassAssemblyQualifiedNameComparer();
-
             Func<Type, bool> isPreferredType;
 
             if (import.FactoryType == null)
@@ -520,7 +485,7 @@ namespace Rock.StaticDependencyInjection
                     .OrderByDescending(g => g.Key)
                     .Select(g =>
                         g.OrderByDescending(export => isPreferredType(export.TargetClass))
-                            .ThenBy(export => export, exportComparer)
+                            .ThenBy(export => export, import.Options.ExportComparer)
                             .ToList())
                     .ToList();
 
@@ -565,17 +530,6 @@ namespace Rock.StaticDependencyInjection
             return
                 prioritizedGroupsOfCandidateTypes
                     .Select(group => group.Select(g => g.TargetClass).ToList()).ToList();
-        }
-
-        private class TargetClassAssemblyQualifiedNameComparer : IComparer<ExportInfo>
-        {
-            public int Compare(ExportInfo lhs, ExportInfo rhs)
-            {
-                var lhsString = lhs.TargetClass.AssemblyQualifiedName ?? lhs.TargetClass.ToString();
-                var rhsString = rhs.TargetClass.AssemblyQualifiedName ?? rhs.TargetClass.ToString();
-
-                return lhsString.CompareTo(rhsString);
-            }
         }
 
         private static bool AreCompatible(ImportInfo import, ExportInfo export)

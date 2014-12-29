@@ -10,6 +10,7 @@ namespace Rock.StaticDependencyInjection
     internal class ImportOptions
     {
         private string[] _directoryPaths = GetDefaultDirectoryPaths();
+        private IComparer<ExportInfo> _exportComparer = GetDefaultExportComparer();
 
         /// <summary>
         /// Gets or sets a value indicating whether to allow non-public classes to be imported.
@@ -57,12 +58,46 @@ namespace Rock.StaticDependencyInjection
         }
 
         /// <summary>
+        /// Gets or sets a comparer to be used to differentiate between multiple
+        /// exports with the same priority. If not set, or set to null, the value
+        /// returned will be a comparer that sorts based on the assembly qualified
+        /// name of the target class.
+        /// </summary>
+        public IComparer<ExportInfo> ExportComparer
+        {
+            get { return _exportComparer; }
+            set
+            {
+                _exportComparer = value ?? GetDefaultExportComparer();
+            }
+        }
+
+        /// <summary>
         /// Returns an array containing a single element: the value returned by
         /// AppDomain.CurrentDomain.BaseDirectory.
         /// </summary>
         private static string[] GetDefaultDirectoryPaths()
         {
             return new[] { AppDomain.CurrentDomain.BaseDirectory };
+        }
+
+        /// <summary>
+        /// Gets a new instance of <see cref="TargetClassAssemblyQualifiedNameComparer"/>.
+        /// </summary>
+        private static IComparer<ExportInfo> GetDefaultExportComparer()
+        {
+            return new TargetClassAssemblyQualifiedNameComparer();
+        }
+
+        private class TargetClassAssemblyQualifiedNameComparer : IComparer<ExportInfo>
+        {
+            public int Compare(ExportInfo lhs, ExportInfo rhs)
+            {
+                var lhsString = lhs.TargetClass.AssemblyQualifiedName ?? lhs.TargetClass.ToString();
+                var rhsString = rhs.TargetClass.AssemblyQualifiedName ?? rhs.TargetClass.ToString();
+
+                return lhsString.CompareTo(rhsString);
+            }
         }
     }
 }
