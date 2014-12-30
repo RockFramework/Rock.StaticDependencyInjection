@@ -30,6 +30,8 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
 
             PriorityTests_SingleHighestPriority();
             PriorityTests_MultipleHighestPriority();
+
+            DuplicateExportTests();
         }
 
         private void ImportSingleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed()
@@ -482,21 +484,53 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 ServiceLocator.MultipleHighestPriority);
         }
 
-        protected override ExportInfo GetExportInfo(Type type)
+        private void DuplicateExportTests()
         {
-            var attribute = Attribute.GetCustomAttribute(type, typeof(ExportAttribute)) as ExportAttribute;
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooDuplicateExport),
+                ServiceLocator.DuplicateExport);
 
-            if (attribute == null)
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryDuplicateExport),
+                factory => factory.GetBar(),
+                ServiceLocator.DuplicateExport);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooDuplicateExport),
+                ServiceLocator.DuplicateExport);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryDuplicateExport),
+                factory => factory.GetBar(),
+                ServiceLocator.DuplicateExport);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooDuplicateExport),
+                ServiceLocator.DuplicateExport);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryDuplicateExport),
+                factory => factory.GetBar(),
+                ServiceLocator.DuplicateExport);
+        }
+
+        protected override IEnumerable<ExportInfo> GetExportInfos(Type type)
+        {
+            var attributes = Attribute.GetCustomAttributes(type, typeof(ExportAttribute));
+
+            if (attributes.Length == 0)
             {
-                return base.GetExportInfo(type);
+                return base.GetExportInfos(type);
             }
 
             return
-                new ExportInfo(type, attribute.Priority)
-                {
-                    Disabled = attribute.Disabled,
-                    Name = attribute.Name
-                };
+                attributes.Cast<ExportAttribute>()
+                .Select(attribute =>
+                    new ExportInfo(type, attribute.Priority)
+                    {
+                        Disabled = attribute.Disabled,
+                        Name = attribute.Name
+                    });
         }
 
         protected override IEnumerable<ExportInfo> GetExportInfos(

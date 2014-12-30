@@ -117,6 +117,14 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
         public const string ImportMultipleIFooMultipleHighestPriority = "ImportMultiple<IFoo>(MultipleHighestPriority)";
         public const string ImportMultipleIBarIBarFactoryMultipleHighestPriority = "ImportMultiple<IBar, IBarFactory>(MultipleHighestPriority)";
 
+        public const string DuplicateExport = "DuplicateExport";
+        public const string ImportSingleIFooDuplicateExport = "ImportSingle<IFoo>(DuplicateExport)";
+        public const string ImportSingleIBarIBarFactoryDuplicateExport = "ImportSingle<IBar, IBarFactory>(DuplicateExport)";
+        public const string ImportFirstIFooDuplicateExport = "ImportFirst<IFoo>(DuplicateExport)";
+        public const string ImportFirstIBarIBarFactoryDuplicateExport = "ImportFirst<IBar, IBarFactory>(DuplicateExport)";
+        public const string ImportMultipleIFooDuplicateExport = "ImportMultiple<IFoo>(DuplicateExport)";
+        public const string ImportMultipleIBarIBarFactoryDuplicateExport = "ImportMultiple<IBar, IBarFactory>(DuplicateExport)";
+
         private static readonly Dictionary<Tuple<Type, string>, object> _registeredInstances = new Dictionary<Tuple<Type, string>, object>(); 
 
         public static void Register<T>(T instance, string name)

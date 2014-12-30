@@ -40,13 +40,13 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
         public abstract void Bootstrap();
 
         /// <summary>
-        /// Return a metadata object that describes the export operation for a type.
+        /// Return a collection of metadata objects that describe the export operations for a type.
         /// </summary>
         /// <param name="type">The type to get export metadata.</param>
-        /// <returns>A metadata object that describes an export operation.</returns>
-        protected virtual ExportInfo GetExportInfo(Type type)
+        /// <returns>A collection of metadata objects that describe export operations.</returns>
+        protected virtual IEnumerable<ExportInfo> GetExportInfos(Type type)
         {
-            return new ExportInfo(type);
+            yield return new ExportInfo(type);
         }
 
         /// <summary>
@@ -491,7 +491,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             }
 
             var prioritizedGroupsOfCandidateTypes =
-                candidateTypeNames.Select(GetExportInfo)
+                candidateTypeNames.SelectMany(GetExportInfos)
                     .Concat(
                         LoadExportInfosFromAssemblyAttributes(
                             import.TargetType,
@@ -520,8 +520,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 {
                     if (uniqueExports.Any(uniqueExport =>
                         export.TargetClass == uniqueExport.TargetClass
-                        && export.Name == uniqueExport.Name
-                        && export.Priority == uniqueExport.Priority))
+                        && export.Name == uniqueExport.Name))
                     {
                         exportsToRemove.Add(export);
                     }
@@ -655,7 +654,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             return null;
         }
 
-        private ExportInfo GetExportInfo(string assemblyQualifiedName)
+        private IEnumerable<ExportInfo> GetExportInfos(string assemblyQualifiedName)
         {
             try
             {
@@ -666,7 +665,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                     return null;
                 }
 
-                return GetExportInfo(type);
+                return GetExportInfos(type);
             }
             catch
             {

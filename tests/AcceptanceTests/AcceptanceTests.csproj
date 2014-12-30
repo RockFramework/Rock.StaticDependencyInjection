@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConcreteServices.cs" />
+    <Compile Include="DuplicateExportTests.cs" />
     <Compile Include="ImportMultipleTests.cs" />
     <Compile Include="ImportFirstTests.cs" />
     <Compile Include="ImportOptionsParameterTests.cs" />

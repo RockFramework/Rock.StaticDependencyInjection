@@ -475,7 +475,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #endregion
 
-    #region Nothing Exports
+    #region ExportComparer Exports
 
     [Export(Name = ServiceLocator.ExportComparer)]
     public class FooExportComparer1 : IFoo
@@ -714,6 +714,43 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         public IBar GetBar()
         {
             return new BarMultipleHighestPriority2(123);
+        }
+    }
+
+    #endregion
+
+    #region Stuff
+
+    [Export(-300, Name = ServiceLocator.DuplicateExport)]
+    [Export(-200, Name = ServiceLocator.DuplicateExport)]
+    [Export(-200, Name = ServiceLocator.DuplicateExport)]
+    public class DuplicateExportFoo : IFoo
+    {
+    }
+
+    public class DuplicateExportBar : IBar
+    {
+        private readonly int _value;
+
+        public DuplicateExportBar(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(-300, Name = ServiceLocator.DuplicateExport)]
+    [Export(-200, Name = ServiceLocator.DuplicateExport)]
+    [Export(-200, Name = ServiceLocator.DuplicateExport)]
+    public class DuplicateExportBarFactory : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new DuplicateExportBar(123);
         }
     }
 
