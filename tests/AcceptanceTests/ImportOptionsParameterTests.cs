@@ -15,6 +15,50 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.ImportMultipleIBarIBarFactoryAllowNonPublicClasses, typeof(NonPublicBar), typeof(PublicBar), TestName = ServiceLocator.ImportMultipleIBarIBarFactoryAllowNonPublicClasses)]
         public void HandlesAllowNonPublicClasses(Type serviceAbstractionType, string serviceName, params Type[] expectedServiceTypes)
         {
+            RunTest(serviceAbstractionType, serviceName, expectedServiceTypes);
+        }
+
+        [TestCase(typeof(IFoo), ServiceLocator.ImportSingleIFooIncludeNamedExportsFromUnnamedImports, TestName = ServiceLocator.ImportSingleIFooIncludeNamedExportsFromUnnamedImports)]
+        [TestCase(typeof(IBar), ServiceLocator.ImportSingleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports, TestName = ServiceLocator.ImportSingleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports)]
+        [TestCase(typeof(IFoo), ServiceLocator.ImportFirstIFooIncludeNamedExportsFromUnnamedImports, typeof(Foo1), TestName = ServiceLocator.ImportFirstIFooIncludeNamedExportsFromUnnamedImports)]
+        [TestCase(typeof(IBar), ServiceLocator.ImportFirstIBarIBarFactoryIncludeNamedExportsFromUnnamedImports, typeof(Bar1), TestName = ServiceLocator.ImportFirstIBarIBarFactoryIncludeNamedExportsFromUnnamedImports)]
+        [TestCase(typeof(IEnumerable<IFoo>), ServiceLocator.ImportMultipleIFooIncludeNamedExportsFromUnnamedImports, typeof(Foo1), typeof(Foo2), typeof(Foo3), typeof(NamedFooImplementation), typeof(PublicFoo), typeof(XyzFoo), typeof(FooImplementation), TestName = ServiceLocator.ImportMultipleIFooIncludeNamedExportsFromUnnamedImports)]
+        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.ImportMultipleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports, typeof(Bar1), typeof(Bar2), typeof(Bar3), typeof(FactoryTypeBarFactory.FactoryTypeBar), typeof(NamedBarImplementation), typeof(PublicBar), typeof(XyzBar), typeof(TargetTypeBar), typeof(BarImplementation), TestName = ServiceLocator.ImportMultipleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports)]
+        public void HandlesIncludeNamedExportsFromUnnamedImports(Type serviceAbstractionType, string serviceName, params Type[] expectedServiceTypes)
+        {
+            RunTest(serviceAbstractionType, serviceName, expectedServiceTypes);
+        }
+
+        [TestCase(typeof(IBar), ServiceLocator.ImportSingleIBarIBarFactoryPreferTTargetType, typeof(TargetTypeBar), TestName = ServiceLocator.ImportSingleIBarIBarFactoryPreferTTargetType)]
+        [TestCase(typeof(IBar), ServiceLocator.ImportFirstIBarIBarFactoryPreferTTargetType, typeof(TargetTypeBar), TestName = ServiceLocator.ImportFirstIBarIBarFactoryPreferTTargetType)]
+        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.ImportMultipleIBarIBarFactoryPreferTTargetType, typeof(TargetTypeBar), typeof(FactoryTypeBarFactory.FactoryTypeBar), TestName = ServiceLocator.ImportMultipleIBarIBarFactoryPreferTTargetType)]
+        public void HandlesPreferTTargetType(Type serviceAbstractionType, string serviceName, params Type[] expectedServiceTypes)
+        {
+            RunTest(serviceAbstractionType, serviceName, expectedServiceTypes);
+        }
+
+        [TestCase(typeof(IFoo), ServiceLocator.ImportSingleIFooIncludeTypesFromThisAssembly, TestName = ServiceLocator.ImportSingleIFooIncludeTypesFromThisAssembly)]
+        [TestCase(typeof(IBar), ServiceLocator.ImportSingleIBarIBarFactoryIncludeTypesFromThisAssembly, TestName = ServiceLocator.ImportSingleIBarIBarFactoryIncludeTypesFromThisAssembly)]
+        [TestCase(typeof(IFoo), ServiceLocator.ImportFirstIFooIncludeTypesFromThisAssembly, typeof(AbcFoo), TestName = ServiceLocator.ImportFirstIFooIncludeTypesFromThisAssembly)]
+        [TestCase(typeof(IBar), ServiceLocator.ImportFirstIBarIBarFactoryIncludeTypesFromThisAssembly, typeof(AbcBar), TestName = ServiceLocator.ImportFirstIBarIBarFactoryIncludeTypesFromThisAssembly)]
+        [TestCase(typeof(IEnumerable<IFoo>), ServiceLocator.ImportMultipleIFooIncludeTypesFromThisAssembly, typeof(AbcFoo), typeof(XyzFoo), TestName = ServiceLocator.ImportMultipleIFooIncludeTypesFromThisAssembly)]
+        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.ImportMultipleIBarIBarFactoryIncludeTypesFromThisAssembly, typeof(AbcBar), typeof(XyzBar), TestName = ServiceLocator.ImportMultipleIBarIBarFactoryIncludeTypesFromThisAssembly)]
+        public void HandlesIncludeTypesFromThisAssembly(Type serviceAbstractionType, string serviceName, params Type[] expectedServiceTypes)
+        {
+            RunTest(serviceAbstractionType, serviceName, expectedServiceTypes);
+        }
+
+        [TestCase(typeof(IFoo), ServiceLocator.ImportFirstIFooExportComparer, typeof(Foo3), TestName = ServiceLocator.ImportFirstIFooExportComparer)]
+        [TestCase(typeof(IBar), ServiceLocator.ImportFirstIBarIBarFactoryExportComparer, typeof(Bar3), TestName = ServiceLocator.ImportFirstIBarIBarFactoryExportComparer)]
+        [TestCase(typeof(IEnumerable<IFoo>), ServiceLocator.ImportMultipleIFooExportComparer, typeof(Foo3), typeof(Foo2), typeof(Foo1), TestName = ServiceLocator.ImportMultipleIFooExportComparer)]
+        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.ImportMultipleIBarIBarFactoryExportComparer, typeof(Bar3), typeof(Bar2), typeof(Bar1), TestName = ServiceLocator.ImportMultipleIBarIBarFactoryExportComparer)]
+        public void HandlesExportComparer(Type serviceAbstractionType, string serviceName, params Type[] expectedServiceTypes)
+        {
+            RunTest(serviceAbstractionType, serviceName, expectedServiceTypes);
+        }
+
+        private static void RunTest(Type serviceAbstractionType, string serviceName, Type[] expectedServiceTypes)
+        {
             var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
 
             switch (expectedServiceTypes.Length)
@@ -29,32 +73,6 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
                     ImportMultipleTests.RunTest(serviceAbstractionType, expectedServiceTypes, serviceName);
                     break;
             }
-        }
-
-        [TestCase(typeof(IFoo), ServiceLocator.ImportSingleIFooIncludeNamedExportsFromUnnamedImports, TestName = ServiceLocator.ImportSingleIFooIncludeNamedExportsFromUnnamedImports)]
-        [TestCase(typeof(IBar), ServiceLocator.ImportSingleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports, TestName = ServiceLocator.ImportSingleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports)]
-        //[TestCase(typeof(IFoo), ServiceLocator.ImportFirstIFooIncludeNamedExportsFromUnnamedImports, typeof(Nothing), TestName = ServiceLocator.ImportFirstIFooIncludeNamedExportsFromUnnamedImports)]
-        //[TestCase(typeof(IBar), ServiceLocator.ImportFirstIBarIBarFactoryIncludeNamedExportsFromUnnamedImports, typeof(Nothing), TestName = ServiceLocator.ImportFirstIBarIBarFactoryIncludeNamedExportsFromUnnamedImports)]
-        //[TestCase(typeof(IFoo), ServiceLocator.ImportMultipleIFooIncludeNamedExportsFromUnnamedImports, typeof(Nothing), typeof(Nothing), TestName = ServiceLocator.ImportMultipleIFooIncludeNamedExportsFromUnnamedImports)]
-        //[TestCase(typeof(IBar), ServiceLocator.ImportMultipleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports, typeof(Nothing), typeof(Nothing), TestName = ServiceLocator.ImportMultipleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports)]
-        public void HandlesIncludeNamedExportsFromUnnamedImports(Type importType, string serviceName, params Type[] expectedServiceTypes)
-        {
-            
-        }
-
-        public void HandlesPreferTTargetType()
-        {
-            
-        }
-
-        public void HandlesIncludeTypesFromThisAssembly()
-        {
-            
-        }
-
-        public void HandlesExportComparer()
-        {
-            
         }
     }
 }

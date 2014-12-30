@@ -22,13 +22,13 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
 
     internal abstract class CompositionRootBase
     {
-        private readonly ConcurrentDictionary<string, ICollection<Type>> _candidateTypesCache;
-        private readonly ConcurrentDictionary<string, ConcurrentDictionary<Tuple<string, string, bool>, IEnumerable<string>>> _candidateTypeNamesByTargetTypeNameCache;
+        private readonly ConcurrentDictionary<Tuple<string, bool>, ICollection<Type>> _candidateTypesCache;
+        private readonly ConcurrentDictionary<string, ConcurrentDictionary<Tuple<string, string, bool, bool>, IEnumerable<string>>> _candidateTypeNamesByTargetTypeNameCache;
 
         protected CompositionRootBase()
         {
-            _candidateTypesCache = new ConcurrentDictionary<string, ICollection<Type>>();
-            _candidateTypeNamesByTargetTypeNameCache = new ConcurrentDictionary<string, ConcurrentDictionary<Tuple<string, string, bool>, IEnumerable<string>>>();
+            _candidateTypesCache = new ConcurrentDictionary<Tuple<string, bool>, ICollection<Type>>();
+            _candidateTypeNamesByTargetTypeNameCache = new ConcurrentDictionary<string, ConcurrentDictionary<Tuple<string, string, bool, bool>, IEnumerable<string>>>();
         }
 
         /// <summary>
@@ -480,7 +480,14 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             }
             else
             {
-                isPreferredType = GetIsTargetTypeFunc(import.FactoryType, import.Options.AllowNonPublicClasses);
+                if (import.Options.PreferTTargetType)
+                {
+                    isPreferredType = GetIsTargetTypeFunc(import.TargetType, import.Options.AllowNonPublicClasses);
+                }
+                else
+                {
+                    isPreferredType = GetIsTargetTypeFunc(import.FactoryType, import.Options.AllowNonPublicClasses);
+                }
             }
 
             var prioritizedGroupsOfCandidateTypes =
@@ -567,7 +574,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomainOnReflectionOnlyAssemblyResolve;
 
                 return
-                    GetAssemblyFiles(directoryPaths)
+                    GetAssemblyFiles(directoryPaths, includeTypesFromThisAssembly)
                         .SelectMany(assemblyFile =>
                             LoadExportInfos(assemblyFile, targetType, includeTypesFromThisAssembly))
                         .ToList();
@@ -672,9 +679,13 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             var candidateTypeNamesCache =
                 _candidateTypeNamesByTargetTypeNameCache.GetOrAdd(
                     import.TargetTypeName,
-                    _ => new ConcurrentDictionary<Tuple<string, string, bool>, IEnumerable<string>>());
+                    _ => new ConcurrentDictionary<Tuple<string, string, bool, bool>, IEnumerable<string>>());
 
-            Tuple<string, string, bool> key = Tuple.Create(import.TargetTypeName, import.FactoryTypeName, import.Options.AllowNonPublicClasses);
+            var key = Tuple.Create(
+                import.TargetTypeName,
+                import.FactoryTypeName,
+                import.Options.AllowNonPublicClasses,
+                import.Options.IncludeTypesFromThisAssembly);
 
             var candidateTypeNames =
                 candidateTypeNamesCache.GetOrAdd(
@@ -693,8 +704,8 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
 
                         var candidateTypes =
                             _candidateTypesCache.GetOrAdd(
-                                string.Join("|", import.Options.DirectoryPaths),
-                                __ => GetCandidateTypes(import.Options.DirectoryPaths));
+                                Tuple.Create(string.Join("|", import.Options.DirectoryPaths), import.Options.IncludeTypesFromThisAssembly),
+                                __ => GetCandidateTypes(import.Options.DirectoryPaths, import.Options.IncludeTypesFromThisAssembly));
 
                         return
                             candidateTypes
@@ -745,12 +756,12 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             return typeInQuestion => false;
         }
 
-        private ICollection<Type> GetCandidateTypes(IEnumerable<string> directoryPaths)
+        private ICollection<Type> GetCandidateTypes(IEnumerable<string> directoryPaths, bool includeTypesFromThisAssembly)
         {
             try
             {
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomainOnReflectionOnlyAssemblyResolve;
-                return GetAssemblyFiles(directoryPaths).SelectMany(LoadCandidateTypes).ToList();
+                return GetAssemblyFiles(directoryPaths, includeTypesFromThisAssembly).SelectMany(x => LoadCandidateTypes(x, includeTypesFromThisAssembly)).ToList();
             }
             finally
             {
@@ -763,7 +774,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             return Assembly.ReflectionOnlyLoad(args.Name);
         }
 
-        private static IEnumerable<string> GetAssemblyFiles(IEnumerable<string> directoryPaths)
+        private static IEnumerable<string> GetAssemblyFiles(IEnumerable<string> directoryPaths, bool includeTypesFromThisAssembly)
         {
             foreach (var directoryPath in directoryPaths)
             {
@@ -796,14 +807,14 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             }
         }
 
-        private static IEnumerable<Type> LoadCandidateTypes(string assemblyFile)
+        private static IEnumerable<Type> LoadCandidateTypes(string assemblyFile, bool includeTypesFromThisAssembly)
         {
             try
             {
                 var assembly = Assembly.ReflectionOnlyLoadFrom(assemblyFile);
 
-                // Don't look here.
-                if (assembly.FullName == typeof(CompositionRootBase).Assembly.FullName)
+                if (!includeTypesFromThisAssembly
+                    && assembly.FullName == typeof(CompositionRootBase).Assembly.FullName)
                 {
                     return Enumerable.Empty<Type>();
                 }

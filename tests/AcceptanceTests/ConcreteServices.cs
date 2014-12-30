@@ -409,21 +409,160 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #endregion
 
-    #region Nothing Exports
+    #region PreferTTargetType Exports
 
+    [Export(Name = ServiceLocator.PreferTTargetType)]
+    public class TargetTypeBar : IBar
+    {
+    }
 
+    [Export(Name = ServiceLocator.PreferTTargetType)]
+    public class FactoryTypeBarFactory : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new FactoryTypeBar(123);
+        }
+
+        internal class FactoryTypeBar : IBar
+        {
+            private readonly int _value;
+
+            public FactoryTypeBar(int value)
+            {
+                _value = value;
+            }
+
+            public int Value
+            {
+                get { return _value; }
+            }
+        }
+    }
+
+    #endregion
+
+    #region IncludeTypesFromThisAssembly Exports
+
+    [Export(Name = ServiceLocator.IncludeTypesFromThisAssembly)]
+    public class XyzFoo : IFoo
+    {
+    }
+
+    public class XyzBar : IBar
+    {
+        private readonly int _value;
+
+        public XyzBar(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Name = ServiceLocator.IncludeTypesFromThisAssembly)]
+    public class XyzBarFactory : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new XyzBar(123);
+        }
+    }
 
     #endregion
 
     #region Nothing Exports
 
+    [Export(Name = ServiceLocator.ExportComparer)]
+    public class Foo1 : IFoo
+    {
+    }
 
+    [Export(Name = ServiceLocator.ExportComparer)]
+    public class Foo2 : IFoo
+    {
+    }
 
-    #endregion
+    [Export(Name = ServiceLocator.ExportComparer)]
+    public class Foo3 : IFoo
+    {
+    }
 
-    #region Nothing Exports
+    public class Bar1 : IBar
+    {
+        private readonly int _value;
 
+        public Bar1(int value)
+        {
+            _value = value;
+        }
 
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class Bar2 : IBar
+    {
+        private readonly int _value;
+
+        public Bar2(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class Bar3 : IBar
+    {
+        private readonly int _value;
+
+        public Bar3(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Name = ServiceLocator.ExportComparer)]
+    public class BarFactory1 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new Bar1(123);
+        }
+    }
+
+    [Export(Name = ServiceLocator.ExportComparer)]
+    public class BarFactory2 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new Bar2(123);
+        }
+    }
+
+    [Export(Name = ServiceLocator.ExportComparer)]
+    public class BarFactory3 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new Bar3(123);
+        }
+    }
 
     #endregion
 
