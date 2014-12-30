@@ -1,4 +1,5 @@
 ﻿using Rock.StaticDependencyInjection.AcceptanceTests.Library;
+using Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDependencyInjection;
 
 namespace Rock.StaticDependencyInjection.AcceptanceTests
 {
@@ -163,4 +164,182 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
             return new QuxInheritor2(123);
         }
     }
+
+#region Named Exports
+
+    [Export(Name = "MyName")]
+    public class NamedFooImplementation : IFoo
+    {
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedFooInheritor : FooBase
+    {
+    }
+
+    public class NamedBarImplementation : IBar
+    {
+        private readonly int _value;
+
+        public NamedBarImplementation(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class NamedBarInheritor : BarBase
+    {
+        private readonly int _value;
+
+        public NamedBarInheritor(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedBarFactoryImplementation : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new NamedBarImplementation(123);
+        }
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedBarFactoryInheritor : BarFactoryBase
+    {
+        public override BarBase GetBar()
+        {
+            return new NamedBarInheritor(123);
+        }
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedBazImplementation1 : IBaz
+    {
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedBazImplementation2 : IBaz
+    {
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedBazInheritor1 : BazBase
+    {
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedBazInheritor2 : BazBase
+    {
+    }
+
+    public class NamedQuxImplementation1 : IQux
+    {
+        private readonly int _value;
+
+        public NamedQuxImplementation1(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class NamedQuxImplementation2 : IQux
+    {
+        private readonly int _value;
+
+        public NamedQuxImplementation2(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class NamedQuxInheritor1 : QuxBase
+    {
+        private readonly int _value;
+
+        public NamedQuxInheritor1(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class NamedQuxInheritor2 : QuxBase
+    {
+        private readonly int _value;
+
+        public NamedQuxInheritor2(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedQuxFactoryImplementation1 : IQuxFactory
+    {
+        public IQux GetQux()
+        {
+            return new NamedQuxImplementation1(123);
+        }
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedQuxFactoryImplementation2 : IQuxFactory
+    {
+        public IQux GetQux()
+        {
+            return new NamedQuxImplementation2(123);
+        }
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedQuxFactoryInheritor1 : QuxFactoryBase
+    {
+        public override QuxBase GetQux()
+        {
+            return new NamedQuxInheritor1(123);
+        }
+    }
+
+    [Export(Name = "MyName")]
+    public class NamedQuxFactoryInheritor2 : QuxFactoryBase
+    {
+        public override QuxBase GetQux()
+        {
+            return new NamedQuxInheritor2(123);
+        }
+    }
+
+#endregion
 }

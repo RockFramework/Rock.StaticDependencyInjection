@@ -25,5 +25,25 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
             var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
             Assert.That(registeredInstance, Is.Null);
         }
+
+        [TestCase(typeof(IFoo), typeof(NamedFooImplementation), ServiceLocator.ImportSingleIFooNamed, TestName = ServiceLocator.ImportSingleIFooNamed)]
+        [TestCase(typeof(IBar), typeof(NamedBarImplementation), ServiceLocator.ImportSingleIBarIBarFactoryNamed, TestName = ServiceLocator.ImportSingleIBarIBarFactoryNamed)]
+        [TestCase(typeof(FooBase), typeof(NamedFooInheritor), ServiceLocator.ImportSingleFooBaseNamed, TestName = ServiceLocator.ImportSingleFooBaseNamed)]
+        [TestCase(typeof(BarBase), typeof(NamedBarInheritor), ServiceLocator.ImportSingleBarBaseBarFactoryBaseNamed, TestName = ServiceLocator.ImportSingleBarBaseBarFactoryBaseNamed)]
+        public void GivenASingleNamedImplementationForTheAbstraction_ThenThatImplementationIsUsed(Type serviceAbstractionType, Type expectedServiceType, string serviceName)
+        {
+            var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
+            Assert.That(registeredInstance, Is.InstanceOf(expectedServiceType));
+        }
+
+        [TestCase(typeof(IBaz), ServiceLocator.ImportSingleIBazNamed, TestName = ServiceLocator.ImportSingleIBazNamed)]
+        [TestCase(typeof(IQux), ServiceLocator.ImportSingleIQuxIQuxFactoryNamed, TestName = ServiceLocator.ImportSingleIQuxIQuxFactoryNamed)]
+        [TestCase(typeof(BazBase), ServiceLocator.ImportSingleBazBaseNamed, TestName = ServiceLocator.ImportSingleBazBaseNamed)]
+        [TestCase(typeof(QuxBase), ServiceLocator.ImportSingleQuxBaseQuxFactoryBaseNamed, TestName = ServiceLocator.ImportSingleQuxBaseQuxFactoryBaseNamed)]
+        public void GivenMultipleNamedImplementationsForTheAbstraction_ThenNoImplementationIsUsed(Type serviceAbstractionType, string serviceName)
+        {
+            var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
+            Assert.That(registeredInstance, Is.Null);
+        }
     }
 }
