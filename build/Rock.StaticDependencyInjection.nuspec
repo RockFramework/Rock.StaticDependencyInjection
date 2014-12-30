@@ -6,7 +6,7 @@
         <title>Rock.StaticDependencyInjection</title>
         <authors>Brian Friesen</authors>
         <owners>Brian Friesen</owners>
-        <licenseUrl>https://github.com/RockFramework/Rock.StaticDependencyInjection/blob/master/license.txt</licenseUrl>
+        <licenseUrl>https://github.com/RockFramework/Rock.StaticDependencyInjection/blob/master/LICENSE.md</licenseUrl>
         <projectUrl>https://github.com/RockFramework/Rock.StaticDependencyInjection</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <developmentDependency>true</developmentDependency>
