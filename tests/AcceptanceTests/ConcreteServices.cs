@@ -478,25 +478,25 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
     #region Nothing Exports
 
     [Export(Name = ServiceLocator.ExportComparer)]
-    public class Foo1 : IFoo
+    public class FooExportComparer1 : IFoo
     {
     }
 
     [Export(Name = ServiceLocator.ExportComparer)]
-    public class Foo2 : IFoo
+    public class FooExportComparer2 : IFoo
     {
     }
 
     [Export(Name = ServiceLocator.ExportComparer)]
-    public class Foo3 : IFoo
+    public class FooExportComparer3 : IFoo
     {
     }
 
-    public class Bar1 : IBar
+    public class BarExportComparer1 : IBar
     {
         private readonly int _value;
 
-        public Bar1(int value)
+        public BarExportComparer1(int value)
         {
             _value = value;
         }
@@ -507,11 +507,11 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    public class Bar2 : IBar
+    public class BarExportComparer2 : IBar
     {
         private readonly int _value;
 
-        public Bar2(int value)
+        public BarExportComparer2(int value)
         {
             _value = value;
         }
@@ -522,11 +522,11 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    public class Bar3 : IBar
+    public class BarExportComparer3 : IBar
     {
         private readonly int _value;
 
-        public Bar3(int value)
+        public BarExportComparer3(int value)
         {
             _value = value;
         }
@@ -538,37 +538,184 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
     }
 
     [Export(Name = ServiceLocator.ExportComparer)]
-    public class BarFactory1 : IBarFactory
+    public class BarFactoryExportComparer1 : IBarFactory
     {
         public IBar GetBar()
         {
-            return new Bar1(123);
+            return new BarExportComparer1(123);
         }
     }
 
     [Export(Name = ServiceLocator.ExportComparer)]
-    public class BarFactory2 : IBarFactory
+    public class BarFactoryExportComparer2 : IBarFactory
     {
         public IBar GetBar()
         {
-            return new Bar2(123);
+            return new BarExportComparer2(123);
         }
     }
 
     [Export(Name = ServiceLocator.ExportComparer)]
-    public class BarFactory3 : IBarFactory
+    public class BarFactoryExportComparer3 : IBarFactory
     {
         public IBar GetBar()
         {
-            return new Bar3(123);
+            return new BarExportComparer3(123);
         }
     }
 
     #endregion
 
-    #region Nothing Exports
+    #region SingleHighestPriority Exports
 
+    [Export(-30, Name = ServiceLocator.SingleHighestPriority)]
+    public class FooSingleHighestPriority1 : IFoo
+    {
+    }
 
+    [Export(-20, Name = ServiceLocator.SingleHighestPriority)]
+    public class FooSingleHighestPriority2 : IFoo
+    {
+    }
+
+    [Export(-10, Name = ServiceLocator.SingleHighestPriority)]
+    public class FooSingleHighestPriority3 : IFoo
+    {
+    }
+
+    public class BarSingleHighestPriority1 : IBar
+    {
+        private readonly int _value;
+
+        public BarSingleHighestPriority1(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class BarSingleHighestPriority2 : IBar
+    {
+        private readonly int _value;
+
+        public BarSingleHighestPriority2(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class BarSingleHighestPriority3 : IBar
+    {
+        private readonly int _value;
+
+        public BarSingleHighestPriority3(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(-30, Name = ServiceLocator.SingleHighestPriority)]
+    public class BarFactorySingleHighestPriority1 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new BarSingleHighestPriority1(123);
+        }
+    }
+
+    [Export(-20, Name = ServiceLocator.SingleHighestPriority)]
+    public class BarFactorySingleHighestPriority2 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new BarSingleHighestPriority2(123);
+        }
+    }
+
+    [Export(-10, Name = ServiceLocator.SingleHighestPriority)]
+    public class BarFactorySingleHighestPriority3 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new BarSingleHighestPriority3(123);
+        }
+    }
+
+    #endregion
+
+    #region MultipleHighestPriority Exports
+
+    [Export(-100, Name = ServiceLocator.MultipleHighestPriority)]
+    public class FooMultipleHighestPriority1 : IFoo
+    {
+    }
+
+    [Export(-100, Name = ServiceLocator.MultipleHighestPriority)]
+    public class FooMultipleHighestPriority2 : IFoo
+    {
+    }
+
+    public class BarMultipleHighestPriority1 : IBar
+    {
+        private readonly int _value;
+
+        public BarMultipleHighestPriority1(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class BarMultipleHighestPriority2 : IBar
+    {
+        private readonly int _value;
+
+        public BarMultipleHighestPriority2(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(-100, Name = ServiceLocator.MultipleHighestPriority)]
+    public class BarFactoryMultipleHighestPriority1 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new BarMultipleHighestPriority1(123);
+        }
+    }
+
+    [Export(-100, Name = ServiceLocator.MultipleHighestPriority)]
+    public class BarFactoryMultipleHighestPriority2 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new BarMultipleHighestPriority2(123);
+        }
+    }
 
     #endregion
 }

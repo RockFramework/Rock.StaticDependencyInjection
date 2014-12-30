@@ -89,7 +89,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
 
         public const string IncludeTypesFromThisAssembly = "IncludeTypesFromThisAssembly";
         public const string ImportSingleIFooIncludeTypesFromThisAssembly = "ImportSingle<IFoo>(IncludeTypesFromThisAssembly)";
-        public const string ImportSingleIBarIBarFactoryIncludeTypesFromThisAssembly = "ImportSingle<IBar, IBarFactory>(IncludeTypesFromThisAssembly)";
+        public const string ImportSingleIBarIBarFactoryIncludeTypesFromThisAssembly = "ImportSingle<IBar, IBarFactory>(InclSingleHighestPriorityudeTypesFromThisAssembly)";
         public const string ImportFirstIFooIncludeTypesFromThisAssembly = "ImportFirst<IFoo>(IncludeTypesFromThisAssembly)";
         public const string ImportFirstIBarIBarFactoryIncludeTypesFromThisAssembly = "ImportFirst<IBar, IBarFactory>(IncludeTypesFromThisAssembly)";
         public const string ImportMultipleIFooIncludeTypesFromThisAssembly = "ImportMultiple<IFoo>(IncludeTypesFromThisAssembly)";
@@ -100,6 +100,22 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
         public const string ImportFirstIBarIBarFactoryExportComparer = "ImportFirst<IBar, IBarFactory>(ExportComparer)";
         public const string ImportMultipleIFooExportComparer = "ImportMultiple<IFoo>(ExportComparer)";
         public const string ImportMultipleIBarIBarFactoryExportComparer = "ImportMultiple<IBar, IBarFactory>(ExportComparer)";
+
+        public const string SingleHighestPriority = "SingleHighestPriority";
+        public const string ImportSingleIFooSingleHighestPriority = "ImportSingle<IFoo>(SingleHighestPriority)";
+        public const string ImportSingleIBarIBarFactorySingleHighestPriority = "ImportSingle<IBar, IBarFactory>(SingleHighestPriority)";
+        public const string ImportFirstIFooSingleHighestPriority = "ImportFirst<IFoo>(SingleHighestPriority)";
+        public const string ImportFirstIBarIBarFactorySingleHighestPriority = "ImportFirst<IBar, IBarFactory>(SingleHighestPriority)";
+        public const string ImportMultipleIFooSingleHighestPriority = "ImportMultiple<IFoo>(SingleHighestPriority)";
+        public const string ImportMultipleIBarIBarFactorySingleHighestPriority = "ImportMultiple<IBar, IBarFactory>(SingleHighestPriority)";
+
+        public const string MultipleHighestPriority = "MultipleHighestPriority";
+        public const string ImportSingleIFooMultipleHighestPriority = "ImportSingle<IFoo>(MultipleHighestPriority)";
+        public const string ImportSingleIBarIBarFactoryMultipleHighestPriority = "ImportSingle<IBar, IBarFactory>(MultipleHighestPriority)";
+        public const string ImportFirstIFooMultipleHighestPriority = "ImportFirst<IFoo>(MultipleHighestPriority)";
+        public const string ImportFirstIBarIBarFactoryMultipleHighestPriority = "ImportFirst<IBar, IBarFactory>(MultipleHighestPriority)";
+        public const string ImportMultipleIFooMultipleHighestPriority = "ImportMultiple<IFoo>(MultipleHighestPriority)";
+        public const string ImportMultipleIBarIBarFactoryMultipleHighestPriority = "ImportMultiple<IBar, IBarFactory>(MultipleHighestPriority)";
 
         private static readonly Dictionary<Tuple<Type, string>, object> _registeredInstances = new Dictionary<Tuple<Type, string>, object>(); 
 

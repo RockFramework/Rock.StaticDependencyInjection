@@ -27,6 +27,9 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             ImportOptionsParameterTests_HandlesPreferTTargetType();
             ImportOptionsParameterTests_HandlesIncludeTypesFromThisAssembly();
             ImportOptionsParameterTests_HandlesExportComparer();
+
+            PriorityTests_SingleHighestPriority();
+            PriorityTests_MultipleHighestPriority();
         }
 
         private void ImportSingleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed()
@@ -417,6 +420,66 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 factory => factory.GetBar(),
                 ServiceLocator.ExportComparer,
                 importOptions);
+        }
+
+        private void PriorityTests_SingleHighestPriority()
+        {
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooSingleHighestPriority),
+                ServiceLocator.SingleHighestPriority);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactorySingleHighestPriority),
+                factory => factory.GetBar(),
+                ServiceLocator.SingleHighestPriority);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooSingleHighestPriority),
+                ServiceLocator.SingleHighestPriority);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactorySingleHighestPriority),
+                factory => factory.GetBar(),
+                ServiceLocator.SingleHighestPriority);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooSingleHighestPriority),
+                ServiceLocator.SingleHighestPriority);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactorySingleHighestPriority),
+                factory => factory.GetBar(),
+                ServiceLocator.SingleHighestPriority);
+        }
+
+        private void PriorityTests_MultipleHighestPriority()
+        {
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooMultipleHighestPriority),
+                ServiceLocator.MultipleHighestPriority);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryMultipleHighestPriority),
+                factory => factory.GetBar(),
+                ServiceLocator.MultipleHighestPriority);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooMultipleHighestPriority),
+                ServiceLocator.MultipleHighestPriority);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryMultipleHighestPriority),
+                factory => factory.GetBar(),
+                ServiceLocator.MultipleHighestPriority);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooMultipleHighestPriority),
+                ServiceLocator.MultipleHighestPriority);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryMultipleHighestPriority),
+                factory => factory.GetBar(),
+                ServiceLocator.MultipleHighestPriority);
         }
 
         protected override ExportInfo GetExportInfo(Type type)
