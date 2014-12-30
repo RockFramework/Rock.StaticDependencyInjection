@@ -41,7 +41,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 qux => ServiceLocator.Register(qux, ServiceLocator.ImportSingleQuxBaseQuxFactoryBase),
                 factory => factory.GetQux());
 
-            // ImportFirstTests.GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed
+            // ImportFirstTests.GivenASingleImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed
 
             ImportFirst<IFoo>(
                 foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFoo));
@@ -57,7 +57,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstBarBaseBarFactoryBase),
                 factory => factory.GetBar());
 
-            // ImportFirstTests.GivenASingleImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed
+            // ImportFirstTests.GivenAMultipleImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed
 
             ImportFirst<IBaz>(
                 baz => ServiceLocator.Register(baz, ServiceLocator.ImportFirstIBaz));
@@ -73,7 +73,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 qux => ServiceLocator.Register(qux, ServiceLocator.ImportFirstQuxBaseQuxFactoryBase),
                 factory => factory.GetQux());
 
-            // 
+            // ImportMultipleTests.GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed
 
             ImportMultiple<IFoo>(
                 foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFoo));
@@ -89,7 +89,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleBarBaseBarFactoryBase),
                 factory => factory.GetBar());
 
-            // 
+            // ImportMultipleTests.GivenMultipleImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically
 
             ImportMultiple<IBaz>(
                 bazes => ServiceLocator.Register(bazes, ServiceLocator.ImportMultipleIBaz));
