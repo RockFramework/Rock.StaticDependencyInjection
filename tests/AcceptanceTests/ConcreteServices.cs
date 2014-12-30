@@ -719,7 +719,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #endregion
 
-    #region Stuff
+    #region DuplicateExport Exports
 
     [Export(-300, Name = ServiceLocator.DuplicateExport)]
     [Export(-200, Name = ServiceLocator.DuplicateExport)]
@@ -751,6 +751,57 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         public IBar GetBar()
         {
             return new DuplicateExportBar(123);
+        }
+    }
+
+    #endregion
+
+    #region Non-Default Constructor Exports
+
+    [Export(-400, Name = ServiceLocator.NonDefaultConstructor)]
+    public class NonDefaultConstructorFoo : IFoo
+    {
+        private readonly int _value;
+
+        public NonDefaultConstructorFoo(int value = 123)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    public class NonDefaultConstructorBar : IBar
+    {
+        private readonly int _value;
+
+        public NonDefaultConstructorBar(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(-400, Name = ServiceLocator.NonDefaultConstructor)]
+    public class NonDefaultConstructorBarFactory : IBarFactory
+    {
+        private readonly int _value;
+
+        public NonDefaultConstructorBarFactory(int value = 123)
+        {
+            _value = value;
+        }
+
+        public IBar GetBar()
+        {
+            return new NonDefaultConstructorBar(_value);
         }
     }
 

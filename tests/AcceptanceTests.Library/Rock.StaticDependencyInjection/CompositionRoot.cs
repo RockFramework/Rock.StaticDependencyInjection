@@ -32,6 +32,8 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             PriorityTests_MultipleHighestPriority();
 
             DuplicateExportTests();
+
+            NonDefaultConstructorTests();
         }
 
         private void ImportSingleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed()
@@ -512,6 +514,36 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryDuplicateExport),
                 factory => factory.GetBar(),
                 ServiceLocator.DuplicateExport);
+        }
+
+        private void NonDefaultConstructorTests()
+        {
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooNonDefaultConstructor),
+                ServiceLocator.NonDefaultConstructor);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryNonDefaultConstructor),
+                factory => factory.GetBar(),
+                ServiceLocator.NonDefaultConstructor);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooNonDefaultConstructor),
+                ServiceLocator.NonDefaultConstructor);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryNonDefaultConstructor),
+                factory => factory.GetBar(),
+                ServiceLocator.NonDefaultConstructor);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooNonDefaultConstructor),
+                ServiceLocator.NonDefaultConstructor);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryNonDefaultConstructor),
+                factory => factory.GetBar(),
+                ServiceLocator.NonDefaultConstructor);
         }
 
         protected override IEnumerable<ExportInfo> GetExportInfos(Type type)
