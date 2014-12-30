@@ -23,12 +23,12 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
     internal abstract class CompositionRootBase
     {
         private readonly ConcurrentDictionary<string, ICollection<Type>> _candidateTypesCache;
-        private readonly ConcurrentDictionary<string, ConcurrentDictionary<string, IEnumerable<string>>> _candidateTypeNamesByTargetTypeNameCache;
+        private readonly ConcurrentDictionary<string, ConcurrentDictionary<Tuple<string, string, bool>, IEnumerable<string>>> _candidateTypeNamesByTargetTypeNameCache;
 
         protected CompositionRootBase()
         {
             _candidateTypesCache = new ConcurrentDictionary<string, ICollection<Type>>();
-            _candidateTypeNamesByTargetTypeNameCache = new ConcurrentDictionary<string, ConcurrentDictionary<string, IEnumerable<string>>>();
+            _candidateTypeNamesByTargetTypeNameCache = new ConcurrentDictionary<string, ConcurrentDictionary<Tuple<string, string, bool>, IEnumerable<string>>>();
         }
 
         /// <summary>
@@ -480,7 +480,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             }
             else
             {
-                isPreferredType = GetIsTargetTypeFunc(import, import.FactoryType);
+                isPreferredType = GetIsTargetTypeFunc(import.FactoryType, import.Options.AllowNonPublicClasses);
             }
 
             var prioritizedGroupsOfCandidateTypes =
@@ -672,18 +672,20 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             var candidateTypeNamesCache =
                 _candidateTypeNamesByTargetTypeNameCache.GetOrAdd(
                     import.TargetTypeName,
-                    _ => new ConcurrentDictionary<string, IEnumerable<string>>());
+                    _ => new ConcurrentDictionary<Tuple<string, string, bool>, IEnumerable<string>>());
+
+            Tuple<string, string, bool> key = Tuple.Create(import.TargetTypeName, import.FactoryTypeName, import.Options.AllowNonPublicClasses);
 
             var candidateTypeNames =
                 candidateTypeNamesCache.GetOrAdd(
-                    import.TargetTypeName,
+                    key,
                     _ =>
                     {
-                        var isTargetType = GetIsTargetTypeFunc(import, import.TargetType);
+                        var isTargetType = GetIsTargetTypeFunc(import.TargetType, import.Options.AllowNonPublicClasses);
 
                         if (import.FactoryType != null)
                         {
-                            var isFactoryType = GetIsTargetTypeFunc(import, import.FactoryType);
+                            var isFactoryType = GetIsTargetTypeFunc(import.FactoryType, import.Options.AllowNonPublicClasses);
                             var isTargetTypeLocal = isTargetType;
 
                             isTargetType = type => isTargetTypeLocal(type) || isFactoryType(type);
@@ -704,7 +706,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             return candidateTypeNames;
         }
 
-        private static Func<Type, bool> GetIsTargetTypeFunc(ImportInfo import, Type targetType)
+        private static Func<Type, bool> GetIsTargetTypeFunc(Type targetType, bool allowNonPublicClasses)
         {
             var targetTypeName = targetType.AssemblyQualifiedName;
 
@@ -716,7 +718,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             if (targetType.IsInterface)
             {
                 return typeInQuestion =>
-                    (typeInQuestion.IsPublic || import.Options.AllowNonPublicClasses)
+                    (typeInQuestion.IsPublic || allowNonPublicClasses)
                     && typeInQuestion.GetInterfaces().Any(i => i.AssemblyQualifiedName == targetTypeName);
             }
 

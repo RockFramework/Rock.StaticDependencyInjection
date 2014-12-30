@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rock.StaticDependencyInjection.AcceptanceTests.Library;
 
@@ -10,8 +11,8 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         [TestCase(typeof(IBar), ServiceLocator.ImportSingleIBarIBarFactoryAllowNonPublicClasses, TestName = ServiceLocator.ImportSingleIBarIBarFactoryAllowNonPublicClasses)]
         [TestCase(typeof(IFoo), ServiceLocator.ImportFirstIFooAllowNonPublicClasses, typeof(NonPublicFoo), TestName = ServiceLocator.ImportFirstIFooAllowNonPublicClasses)]
         [TestCase(typeof(IBar), ServiceLocator.ImportFirstIBarIBarFactoryAllowNonPublicClasses, typeof(NonPublicBar), TestName = ServiceLocator.ImportFirstIBarIBarFactoryAllowNonPublicClasses)]
-        [TestCase(typeof(IFoo), ServiceLocator.ImportMultipleIFooAllowNonPublicClasses, typeof(NonPublicFoo), typeof(PublicFoo), TestName = ServiceLocator.ImportMultipleIFooAllowNonPublicClasses)]
-        [TestCase(typeof(IBar), ServiceLocator.ImportMultipleIBarIBarFactoryAllowNonPublicClasses, typeof(NonPublicBar), typeof(PublicBar), TestName = ServiceLocator.ImportMultipleIBarIBarFactoryAllowNonPublicClasses)]
+        [TestCase(typeof(IEnumerable<IFoo>), ServiceLocator.ImportMultipleIFooAllowNonPublicClasses, typeof(NonPublicFoo), typeof(PublicFoo), TestName = ServiceLocator.ImportMultipleIFooAllowNonPublicClasses)]
+        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.ImportMultipleIBarIBarFactoryAllowNonPublicClasses, typeof(NonPublicBar), typeof(PublicBar), TestName = ServiceLocator.ImportMultipleIBarIBarFactoryAllowNonPublicClasses)]
         public void HandlesAllowNonPublicClasses(Type serviceAbstractionType, string serviceName, params Type[] expectedServiceTypes)
         {
             var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
