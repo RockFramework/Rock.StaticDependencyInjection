@@ -45,6 +45,7 @@
     <Compile Include="ConcreteServices.cs" />
     <Compile Include="ImportMultipleTests.cs" />
     <Compile Include="ImportFirstTests.cs" />
+    <Compile Include="ImportOptionsParameterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ImportSingleTests.cs" />
   </ItemGroup>

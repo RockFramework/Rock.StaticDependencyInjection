@@ -9,8 +9,28 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
     {
         public override void Bootstrap()
         {
-            // ImportSingleTests.GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed
+            ImportSingleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed();
+            ImportSingleTests_GivenASingleNamedImplementationForTheAbstraction_ThenThatImplementationIsUsed();
+            ImportSingleTests_GivenMultipleImplementationsForTheAbstraction_ThenNoImplementationIsUsed();
+            ImportSingleTests_GivenMultipleNamedImplementationsForTheAbstraction_ThenNoImplementationIsUsed();
+            ImportFirstTests_GivenASingleImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed();
+            ImportFirstTests_GivenASingleNamedImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed();
+            ImportFirstTests_GivenMultipleImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed();
+            ImportFirstTests_GivenMultipleNamedImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed();
+            ImportMultipleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed();
+            ImportMultipleTests_GivenASingleNamedImplementationForTheAbstraction_ThenThatImplementationIsUsed();
+            ImportMultipleTests_GivenMultipleImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically();
+            ImportMultipleTests_GivenMultipleNamedImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically();
 
+            ImportOptionsParameterTests_HandlesAllowNonPublicClasses();
+            ImportOptionsParameterTests_HandlesIncludeNamedExportsFromUnnamedImports();
+            ImportOptionsParameterTests_HandlesPreferTTargetType();
+            ImportOptionsParameterTests_HandlesIncludeTypesFromThisAssembly();
+            ImportOptionsParameterTests_HandlesExportComparer();
+        }
+
+        private void ImportSingleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed()
+        {
             ImportSingle<IFoo>(
                 foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFoo));
 
@@ -24,29 +44,31 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             ImportSingle<BarBase, BarFactoryBase>(
                 bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleBarBaseBarFactoryBase),
                 factory => factory.GetBar());
+        }
 
-            // GivenASingleNamedImplementationForTheAbstraction_ThenThatImplementationIsUsed
-
+        private void ImportSingleTests_GivenASingleNamedImplementationForTheAbstraction_ThenThatImplementationIsUsed()
+        {
             ImportSingle<IFoo>(
                 foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportSingle<IBar, IBarFactory>(
                 bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryNamed),
                 factory => factory.GetBar(),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportSingle<FooBase>(
                 foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleFooBaseNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportSingle<BarBase, BarFactoryBase>(
                 bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleBarBaseBarFactoryBaseNamed),
                 factory => factory.GetBar(),
-                "MyName");
+                ServiceLocator.MyName);
+        }
 
-            // ImportSingleTests.GivenMultipleImplementationsForTheAbstraction_ThenNoImplementationIsUsed
-
+        private void ImportSingleTests_GivenMultipleImplementationsForTheAbstraction_ThenNoImplementationIsUsed()
+        {
             ImportSingle<IBaz>(
                 baz => ServiceLocator.Register(baz, ServiceLocator.ImportSingleIBaz));
 
@@ -60,29 +82,31 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             ImportSingle<QuxBase, QuxFactoryBase>(
                 qux => ServiceLocator.Register(qux, ServiceLocator.ImportSingleQuxBaseQuxFactoryBase),
                 factory => factory.GetQux());
+        }
 
-            // ImportSingleTests.GivenMultipleNamedImplementationsForTheAbstraction_ThenNoImplementationIsUsed
-
+        private void ImportSingleTests_GivenMultipleNamedImplementationsForTheAbstraction_ThenNoImplementationIsUsed()
+        {
             ImportSingle<IBaz>(
                 baz => ServiceLocator.Register(baz, ServiceLocator.ImportSingleIBazNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportSingle<IQux, IQuxFactory>(
                 qux => ServiceLocator.Register(qux, ServiceLocator.ImportSingleIQuxIQuxFactoryNamed),
                 factory => factory.GetQux(),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportSingle<BazBase>(
                 baz => ServiceLocator.Register(baz, ServiceLocator.ImportSingleBazBaseNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportSingle<QuxBase, QuxFactoryBase>(
                 qux => ServiceLocator.Register(qux, ServiceLocator.ImportSingleQuxBaseQuxFactoryBaseNamed),
                 factory => factory.GetQux(),
-                "MyName");
+                ServiceLocator.MyName);
+        }
 
-            // ImportFirstTests.GivenASingleImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed
-
+        private void ImportFirstTests_GivenASingleImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed()
+        {
             ImportFirst<IFoo>(
                 foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFoo));
 
@@ -96,29 +120,31 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             ImportFirst<BarBase, BarFactoryBase>(
                 bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstBarBaseBarFactoryBase),
                 factory => factory.GetBar());
+        }
 
-            // ImportFirstTests.GivenASingleNamedImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed
-
+        private void ImportFirstTests_GivenASingleNamedImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed()
+        {
             ImportFirst<IFoo>(
                 foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportFirst<IBar, IBarFactory>(
                 bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryNamed),
                 factory => factory.GetBar(),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportFirst<FooBase>(
                 foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstFooBaseNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportFirst<BarBase, BarFactoryBase>(
                 bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstBarBaseBarFactoryBaseNamed),
                 factory => factory.GetBar(),
-                "MyName");
+                ServiceLocator.MyName);
+        }
 
-            // ImportFirstTests.GivenMultipleImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed
-
+        private void ImportFirstTests_GivenMultipleImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed()
+        {
             ImportFirst<IBaz>(
                 baz => ServiceLocator.Register(baz, ServiceLocator.ImportFirstIBaz));
 
@@ -132,29 +158,31 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             ImportFirst<QuxBase, QuxFactoryBase>(
                 qux => ServiceLocator.Register(qux, ServiceLocator.ImportFirstQuxBaseQuxFactoryBase),
                 factory => factory.GetQux());
+        }
 
-            // ImportFirstTests.GivenMultipleNamedImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed
-
+        private void ImportFirstTests_GivenMultipleNamedImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed()
+        {
             ImportFirst<IBaz>(
                 baz => ServiceLocator.Register(baz, ServiceLocator.ImportFirstIBazNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportFirst<IQux, IQuxFactory>(
                 qux => ServiceLocator.Register(qux, ServiceLocator.ImportFirstIQuxIQuxFactoryNamed),
                 factory => factory.GetQux(),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportFirst<BazBase>(
                 baz => ServiceLocator.Register(baz, ServiceLocator.ImportFirstBazBaseNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportFirst<QuxBase, QuxFactoryBase>(
                 qux => ServiceLocator.Register(qux, ServiceLocator.ImportFirstQuxBaseQuxFactoryBaseNamed),
                 factory => factory.GetQux(),
-                "MyName");
+                ServiceLocator.MyName);
+        }
 
-            // ImportMultipleTests.GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed
-
+        private void ImportMultipleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed()
+        {
             ImportMultiple<IFoo>(
                 foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFoo));
 
@@ -168,29 +196,31 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             ImportMultiple<BarBase, BarFactoryBase>(
                 bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleBarBaseBarFactoryBase),
                 factory => factory.GetBar());
+        }
 
-            // ImportMultipleTests.GivenASingleNamedImplementationForTheAbstraction_ThenThatImplementationIsUsed
-
+        private void ImportMultipleTests_GivenASingleNamedImplementationForTheAbstraction_ThenThatImplementationIsUsed()
+        {
             ImportMultiple<IFoo>(
                 foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportMultiple<IBar, IBarFactory>(
                 bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryNamed),
                 factory => factory.GetBar(),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportMultiple<FooBase>(
                 foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleFooBaseNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportMultiple<BarBase, BarFactoryBase>(
                 bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleBarBaseBarFactoryBaseNamed),
                 factory => factory.GetBar(),
-                "MyName");
+                ServiceLocator.MyName);
+        }
 
-            // ImportMultipleTests.GivenMultipleImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically
-
+        private void ImportMultipleTests_GivenMultipleImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically()
+        {
             ImportMultiple<IBaz>(
                 bazes => ServiceLocator.Register(bazes, ServiceLocator.ImportMultipleIBaz));
 
@@ -204,26 +234,189 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             ImportMultiple<QuxBase, QuxFactoryBase>(
                 quxes => ServiceLocator.Register(quxes, ServiceLocator.ImportMultipleQuxBaseQuxFactoryBase),
                 factory => factory.GetQux());
+        }
 
-            // ImportMultipleTests.GivenMultipleNamedImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically
-
+        private void ImportMultipleTests_GivenMultipleNamedImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically()
+        {
             ImportMultiple<IBaz>(
                 bazes => ServiceLocator.Register(bazes, ServiceLocator.ImportMultipleIBazNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportMultiple<IQux, IQuxFactory>(
                 quxes => ServiceLocator.Register(quxes, ServiceLocator.ImportMultipleIQuxIQuxFactoryNamed),
                 factory => factory.GetQux(),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportMultiple<BazBase>(
                 bazes => ServiceLocator.Register(bazes, ServiceLocator.ImportMultipleBazBaseNamed),
-                "MyName");
+                ServiceLocator.MyName);
 
             ImportMultiple<QuxBase, QuxFactoryBase>(
                 quxes => ServiceLocator.Register(quxes, ServiceLocator.ImportMultipleQuxBaseQuxFactoryBaseNamed),
                 factory => factory.GetQux(),
-                "MyName");
+                ServiceLocator.MyName);
+        }
+
+        private void ImportOptionsParameterTests_HandlesAllowNonPublicClasses()
+        {
+            var importOptions = new ImportOptions { AllowNonPublicClasses = true };
+
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooAllowNonPublicClasses),
+                ServiceLocator.AllowNonPublicClasses,
+                importOptions);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryAllowNonPublicClasses),
+                factory => factory.GetBar(),
+                ServiceLocator.AllowNonPublicClasses,
+                importOptions);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooAllowNonPublicClasses),
+                ServiceLocator.AllowNonPublicClasses,
+                importOptions);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryAllowNonPublicClasses),
+                factory => factory.GetBar(),
+                ServiceLocator.AllowNonPublicClasses,
+                importOptions);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooAllowNonPublicClasses),
+                ServiceLocator.AllowNonPublicClasses,
+                importOptions);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryAllowNonPublicClasses),
+                factory => factory.GetBar(),
+                ServiceLocator.AllowNonPublicClasses,
+                importOptions);
+        }
+
+        private void ImportOptionsParameterTests_HandlesIncludeNamedExportsFromUnnamedImports()
+        {
+            var importOptions = new ImportOptions { IncludeNamedExportsFromUnnamedImports = true };
+
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooIncludeNamedExportsFromUnnamedImports),
+                options:importOptions);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports),
+                factory => factory.GetBar(),
+                options:importOptions);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooIncludeNamedExportsFromUnnamedImports),
+                options:importOptions);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryIncludeNamedExportsFromUnnamedImports),
+                factory => factory.GetBar(),
+                options:importOptions);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooIncludeNamedExportsFromUnnamedImports),
+                options:importOptions);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports),
+                factory => factory.GetBar(),
+                options:importOptions);
+        }
+
+        private void ImportOptionsParameterTests_HandlesPreferTTargetType()
+        {
+            var importOptions = new ImportOptions { PreferTTargetType = true };
+
+            // PreferTTargetType has no effect on the non-factory import operations.
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryPreferTTargetType),
+                factory => factory.GetBar(),
+                ServiceLocator.PreferTTargetType,
+                importOptions);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryPreferTTargetType),
+                factory => factory.GetBar(),
+                ServiceLocator.PreferTTargetType,
+                importOptions);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryPreferTTargetType),
+                factory => factory.GetBar(),
+                ServiceLocator.PreferTTargetType,
+                importOptions);
+        }
+
+        private void ImportOptionsParameterTests_HandlesIncludeTypesFromThisAssembly()
+        {
+            var importOptions = new ImportOptions { IncludeTypesFromThisAssembly = true };
+
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooIncludeTypesFromThisAssembly),
+                ServiceLocator.IncludeTypesFromThisAssembly,
+                importOptions);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryIncludeTypesFromThisAssembly),
+                factory => factory.GetBar(),
+                ServiceLocator.IncludeTypesFromThisAssembly,
+                importOptions);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooIncludeTypesFromThisAssembly),
+                ServiceLocator.IncludeTypesFromThisAssembly,
+                importOptions);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryIncludeTypesFromThisAssembly),
+                factory => factory.GetBar(),
+                ServiceLocator.IncludeTypesFromThisAssembly,
+                importOptions);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooIncludeTypesFromThisAssembly),
+                ServiceLocator.IncludeTypesFromThisAssembly,
+                importOptions);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryIncludeTypesFromThisAssembly),
+                factory => factory.GetBar(),
+                ServiceLocator.IncludeTypesFromThisAssembly,
+                importOptions);
+        }
+
+        private void ImportOptionsParameterTests_HandlesExportComparer()
+        {
+            var importOptions = new ImportOptions { ExportComparer = new ReversedTargetClassAssemblyQualifiedNameComparer() };
+
+            // ExportComparer has no effect on ImportSingle operations.
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooExportComparer),
+                ServiceLocator.ExportComparer,
+                importOptions);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryExportComparer),
+                factory => factory.GetBar(),
+                ServiceLocator.ExportComparer,
+                importOptions);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooExportComparer),
+                ServiceLocator.ExportComparer,
+                importOptions);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryExportComparer),
+                factory => factory.GetBar(),
+                ServiceLocator.ExportComparer,
+                importOptions);
         }
 
         protected override ExportInfo GetExportInfo(Type type)
@@ -255,6 +448,18 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                             Disabled = attribute.Disabled,
                             Name = attribute.Name
                         });
+        }
+
+        private class ReversedTargetClassAssemblyQualifiedNameComparer : IComparer<ExportInfo>
+        {
+            public int Compare(ExportInfo lhs, ExportInfo rhs)
+            {
+                var lhsString = lhs.TargetClass.AssemblyQualifiedName ?? lhs.TargetClass.ToString();
+                var rhsString = rhs.TargetClass.AssemblyQualifiedName ?? rhs.TargetClass.ToString();
+
+                // ReSharper disable once StringCompareToIsCultureSpecific
+                return rhsString.CompareTo(lhsString);
+            }
         }
     }
 }

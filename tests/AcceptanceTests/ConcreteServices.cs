@@ -3,6 +3,8 @@ using Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDependen
 
 namespace Rock.StaticDependencyInjection.AcceptanceTests
 {
+    #region Implicit Exports
+
     public class FooImplementation : IFoo
     {
     }
@@ -165,7 +167,9 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-#region Named Exports
+    #endregion
+
+    #region Named Exports
 
     [Export(Name = "MyName")]
     public class NamedFooImplementation : IFoo
@@ -342,4 +346,90 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
     }
 
 #endregion
+
+    #region AllowNonPublicClasses Exports
+
+    [Export(Name = ServiceLocator.AllowNonPublicClasses)]
+    public class PublicFoo : IFoo
+    {
+    }
+
+    [Export(Name = ServiceLocator.AllowNonPublicClasses)]
+    internal class NonPublicFoo : IFoo
+    {
+    }
+
+    public class PublicBar : IBar
+    {
+        private readonly int _value;
+
+        public PublicBar(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    internal class NonPublicBar : IBar
+    {
+        private readonly int _value;
+
+        public NonPublicBar(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Name = ServiceLocator.AllowNonPublicClasses)]
+    public class PublicBarFactory : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new PublicBar(123);
+        }
+    }
+
+    [Export(Name = ServiceLocator.AllowNonPublicClasses)]
+    internal class NonPublicBarFactory : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new NonPublicBar(456);
+        }
+    }
+
+    #endregion
+
+    #region Nothing Exports
+
+
+
+    #endregion
+
+    #region Nothing Exports
+
+
+
+    #endregion
+
+    #region Nothing Exports
+
+
+
+    #endregion
+
+    #region Nothing Exports
+
+
+
+    #endregion
 }

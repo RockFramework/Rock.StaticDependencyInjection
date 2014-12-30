@@ -45,7 +45,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
             RunTest(serviceAbstractionType, expectedServiceTypes, serviceName);
         }
 
-        private static void RunTest(Type serviceAbstractionType, Type[] expectedServiceTypes, string serviceName)
+        public static void RunTest(Type serviceAbstractionType, Type[] expectedServiceTypes, string serviceName)
         {
             var registeredInstances =
                 ((IEnumerable)ServiceLocator.Get(serviceAbstractionType, serviceName)).Cast<object>().ToList();

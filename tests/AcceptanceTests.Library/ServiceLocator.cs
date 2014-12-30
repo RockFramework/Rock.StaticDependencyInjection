@@ -5,6 +5,8 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
 {
     public static class ServiceLocator
     {
+        public const string MyName = "MyName";
+
         public const string ImportSingleIFoo = "ImportSingle<IFoo>";
         public const string ImportSingleIBarIBarFactory = "ImportSingle<IBar, IBarFactory>";
         public const string ImportSingleFooBase = "ImportSingle<FooBase>";
@@ -64,6 +66,40 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
         public const string ImportMultipleIQuxIQuxFactoryNamed = "ImportMultiple<IQux, IQuxFactory>(MyName)";
         public const string ImportMultipleBazBaseNamed = "ImportMultiple<BazBase>(MyName)";
         public const string ImportMultipleQuxBaseQuxFactoryBaseNamed = "ImportMultiple<QuxBase, QuxFactoryBase>(MyName)";
+
+        public const string AllowNonPublicClasses = "AllowNonPublicClasses";
+        public const string ImportSingleIFooAllowNonPublicClasses = "ImportSingle<IFoo>(AllowNonPublicClasses)";
+        public const string ImportSingleIBarIBarFactoryAllowNonPublicClasses = "ImportSingle<IBar, IBarFactory>(AllowNonPublicClasses)";
+        public const string ImportFirstIFooAllowNonPublicClasses = "ImportFirst<IFoo>(AllowNonPublicClasses)";
+        public const string ImportFirstIBarIBarFactoryAllowNonPublicClasses = "ImportFirst<IBar, IBarFactory>(AllowNonPublicClasses)";
+        public const string ImportMultipleIFooAllowNonPublicClasses = "ImportMultiple<IFoo>(AllowNonPublicClasses)";
+        public const string ImportMultipleIBarIBarFactoryAllowNonPublicClasses = "ImportMultiple<IBar, IBarFactory>(AllowNonPublicClasses)";
+
+        public const string ImportSingleIFooIncludeNamedExportsFromUnnamedImports = "ImportSingle<IFoo>(IncludeNamedExportsFromUnnamedImports)";
+        public const string ImportSingleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports = "ImportSingle<IBar, IBarFactory>(IncludeNamedExportsFromUnnamedImports)";
+        public const string ImportFirstIFooIncludeNamedExportsFromUnnamedImports = "ImportFirst<IFoo>(IncludeNamedExportsFromUnnamedImports)";
+        public const string ImportFirstIBarIBarFactoryIncludeNamedExportsFromUnnamedImports = "ImportFirst<IBar, IBarFactory>(IncludeNamedExportsFromUnnamedImports)";
+        public const string ImportMultipleIFooIncludeNamedExportsFromUnnamedImports = "ImportMultiple<IFoo>(IncludeNamedExportsFromUnnamedImports)";
+        public const string ImportMultipleIBarIBarFactoryIncludeNamedExportsFromUnnamedImports = "ImportMultiple<IBar, IBarFactory>(IncludeNamedExportsFromUnnamedImports)";
+
+        public const string PreferTTargetType = "PreferTTargetType";
+        public const string ImportSingleIBarIBarFactoryPreferTTargetType = "ImportSingle<IBar, IBarFactory>(PreferTTargetType)";
+        public const string ImportFirstIBarIBarFactoryPreferTTargetType = "ImportFirst<IBar, IBarFactory>(PreferTTargetType)";
+        public const string ImportMultipleIBarIBarFactoryPreferTTargetType = "ImportMultiple<IBar, IBarFactory>(PreferTTargetType)";
+
+        public const string IncludeTypesFromThisAssembly = "IncludeTypesFromThisAssembly";
+        public const string ImportSingleIFooIncludeTypesFromThisAssembly = "ImportSingle<IFoo>(IncludeTypesFromThisAssembly)";
+        public const string ImportSingleIBarIBarFactoryIncludeTypesFromThisAssembly = "ImportSingle<IBar, IBarFactory>(IncludeTypesFromThisAssembly)";
+        public const string ImportFirstIFooIncludeTypesFromThisAssembly = "ImportFirst<IFoo>(IncludeTypesFromThisAssembly)";
+        public const string ImportFirstIBarIBarFactoryIncludeTypesFromThisAssembly = "ImportFirst<IBar, IBarFactory>(IncludeTypesFromThisAssembly)";
+        public const string ImportMultipleIFooIncludeTypesFromThisAssembly = "ImportMultiple<IFoo>(IncludeTypesFromThisAssembly)";
+        public const string ImportMultipleIBarIBarFactoryIncludeTypesFromThisAssembly = "ImportMultiple<IBar, IBarFactory>(IncludeTypesFromThisAssembly)";
+
+        public const string ExportComparer = "ExportComparer";
+        public const string ImportFirstIFooExportComparer = "ImportFirst<IFoo>(ExportComparer)";
+        public const string ImportFirstIBarIBarFactoryExportComparer = "ImportFirst<IBar, IBarFactory>(ExportComparer)";
+        public const string ImportMultipleIFooExportComparer = "ImportMultiple<IFoo>(ExportComparer)";
+        public const string ImportMultipleIBarIBarFactoryExportComparer = "ImportMultiple<IBar, IBarFactory>(ExportComparer)";
 
         private static readonly Dictionary<Tuple<Type, string>, object> _registeredInstances = new Dictionary<Tuple<Type, string>, object>(); 
 
