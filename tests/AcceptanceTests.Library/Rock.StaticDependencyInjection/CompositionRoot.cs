@@ -32,8 +32,8 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             PriorityTests_MultipleHighestPriority();
 
             DuplicateExportTests();
-
             NonDefaultConstructorTests();
+            BadDependencyTests();
         }
 
         private void ImportSingleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed()
@@ -544,6 +544,51 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryNonDefaultConstructor),
                 factory => factory.GetBar(),
                 ServiceLocator.NonDefaultConstructor);
+        }
+
+        private void BadDependencyTests()
+        {
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor),
+                ServiceLocator.FooBadConstructor);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor),
+                factory => factory.GetBar(),
+                ServiceLocator.BarFactoryBadConstructor);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod),
+                factory => factory.GetBar(),
+                ServiceLocator.BarFactoryBadMethod);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor),
+                ServiceLocator.FooBadConstructor);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor),
+                factory => factory.GetBar(),
+                ServiceLocator.BarFactoryBadConstructor);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod),
+                factory => factory.GetBar(),
+                ServiceLocator.BarFactoryBadMethod);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor),
+                ServiceLocator.FooBadConstructor);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor),
+                factory => factory.GetBar(),
+                ServiceLocator.BarFactoryBadConstructor);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod),
+                factory => factory.GetBar(),
+                ServiceLocator.BarFactoryBadMethod);
         }
 
         protected override IEnumerable<ExportInfo> GetExportInfos(Type type)

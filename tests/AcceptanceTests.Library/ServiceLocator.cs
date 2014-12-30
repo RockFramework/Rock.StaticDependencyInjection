@@ -133,6 +133,16 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
         public const string ImportMultipleIFooNonDefaultConstructor = "ImportMultiple<IFoo>(NonDefaultConstructor)";
         public const string ImportMultipleIBarIBarFactoryNonDefaultConstructor = "ImportMultiple<IBar, IBarFactory>(NonDefaultConstructor)";
 
+        public const string FooBadConstructor = "FooBadConstructor";
+        public const string BarFactoryBadConstructor = "BarFactoryBadConstructor";
+        public const string BarFactoryBadMethod = "BarFactoryBadMethod";
+        public const string ImportSingleIFooBadConstructor = "ImportSingle<IFoo>(BadConstructor)";
+        public const string ImportSingleIBarIBarFactoryBadConstructor = "ImportSingle<IBar, IBarFactory>(BadConstructor)";
+        public const string ImportFirstIFooBadConstructor = "ImportFirst<IFoo>(BadConstructor)";
+        public const string ImportFirstIBarIBarFactoryBadConstructor = "ImportFirst<IBar, IBarFactory>(BadConstructor)";
+        public const string ImportMultipleIFooBadConstructor = "ImportMultiple<IFoo>(BadConstructor)";
+        public const string ImportMultipleIBarIBarFactoryBadConstructor = "ImportMultiple<IBar, IBarFactory>(BadConstructor)";
+
         private static readonly Dictionary<Tuple<Type, string>, object> _registeredInstances = new Dictionary<Tuple<Type, string>, object>(); 
 
         public static void Register<T>(T instance, string name)

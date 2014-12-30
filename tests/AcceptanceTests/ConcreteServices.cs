@@ -1,4 +1,5 @@
-﻿using Rock.StaticDependencyInjection.AcceptanceTests.Library;
+﻿using System;
+using Rock.StaticDependencyInjection.AcceptanceTests.Library;
 using Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDependencyInjection;
 
 namespace Rock.StaticDependencyInjection.AcceptanceTests
@@ -802,6 +803,42 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         public IBar GetBar()
         {
             return new NonDefaultConstructorBar(_value);
+        }
+    }
+
+    #endregion
+
+    #region Dependencies That Throw During Construction
+
+    [Export(-500, Name = ServiceLocator.FooBadConstructor)]
+    public class FooBadConstructor : IFoo
+    {
+        public FooBadConstructor()
+        {
+            throw new Exception("Bad things happened.");
+        }
+    }
+
+    [Export(-500, Name = ServiceLocator.BarFactoryBadConstructor)]
+    public class BarFactoryBadConstructor : IBarFactory
+    {
+        public BarFactoryBadConstructor()
+        {
+            throw new Exception("Bad things happened.");
+        }
+
+        public IBar GetBar()
+        {
+            return new AbcBar(123);
+        }
+    }
+
+    [Export(-500, Name = ServiceLocator.BarFactoryBadMethod)]
+    public class BarFactoryBadMethod : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            throw new Exception("Bad things happened.");
         }
     }
 

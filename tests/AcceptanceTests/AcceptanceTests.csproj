@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BadDependencyTests.cs" />
     <Compile Include="ConcreteServices.cs" />
     <Compile Include="DuplicateExportTests.cs" />
     <Compile Include="ImportMultipleTests.cs" />
