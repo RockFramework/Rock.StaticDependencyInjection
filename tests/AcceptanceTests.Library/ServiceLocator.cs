@@ -136,12 +136,12 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
         public const string FooBadConstructor = "FooBadConstructor";
         public const string BarFactoryBadConstructor = "BarFactoryBadConstructor";
         public const string BarFactoryBadMethod = "BarFactoryBadMethod";
-        public const string ImportSingleIFooBadConstructor = "ImportSingle<IFoo>(BadConstructor)";
-        public const string ImportSingleIBarIBarFactoryBadConstructor = "ImportSingle<IBar, IBarFactory>(BadConstructor)";
-        public const string ImportFirstIFooBadConstructor = "ImportFirst<IFoo>(BadConstructor)";
-        public const string ImportFirstIBarIBarFactoryBadConstructor = "ImportFirst<IBar, IBarFactory>(BadConstructor)";
-        public const string ImportMultipleIFooBadConstructor = "ImportMultiple<IFoo>(BadConstructor)";
-        public const string ImportMultipleIBarIBarFactoryBadConstructor = "ImportMultiple<IBar, IBarFactory>(BadConstructor)";
+        public const string ImportSingleIFooBadDependency = "ImportSingle<IFoo>(BadDependency)";
+        public const string ImportSingleIBarIBarFactoryBadDependency = "ImportSingle<IBar, IBarFactory>(BadDependency)";
+        public const string ImportFirstIFooBadDependency = "ImportFirst<IFoo>(BadDependency)";
+        public const string ImportFirstIBarIBarFactoryBadDependency = "ImportFirst<IBar, IBarFactory>(BadDependency)";
+        public const string ImportMultipleIFooBadDependency = "ImportMultiple<IFoo>(BadDependency)";
+        public const string ImportMultipleIBarIBarFactoryBadDependency = "ImportMultiple<IBar, IBarFactory>(BadDependency)";
 
         private static readonly Dictionary<Tuple<Type, string>, object> _registeredInstances = new Dictionary<Tuple<Type, string>, object>(); 
 

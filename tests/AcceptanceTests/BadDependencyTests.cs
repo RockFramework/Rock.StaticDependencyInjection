@@ -8,15 +8,15 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 {
     public class BadDependencyTests
     {
-        [TestCase(typeof(IFoo), ServiceLocator.FooBadConstructor, ServiceLocator.ImportSingleIFooBadConstructor, TestName = ServiceLocator.ImportSingleIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor)]
-        [TestCase(typeof(IBar), ServiceLocator.BarFactoryBadConstructor, ServiceLocator.ImportSingleIBarIBarFactoryBadConstructor, TestName = ServiceLocator.ImportSingleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor)]
-        [TestCase(typeof(IBar), ServiceLocator.BarFactoryBadMethod, ServiceLocator.ImportSingleIBarIBarFactoryBadConstructor, TestName = ServiceLocator.ImportSingleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod)]
-        [TestCase(typeof(IFoo), ServiceLocator.FooBadConstructor, ServiceLocator.ImportFirstIFooBadConstructor, TestName = ServiceLocator.ImportFirstIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor)]
-        [TestCase(typeof(IBar), ServiceLocator.BarFactoryBadConstructor, ServiceLocator.ImportFirstIBarIBarFactoryBadConstructor, TestName = ServiceLocator.ImportFirstIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor)]
-        [TestCase(typeof(IBar), ServiceLocator.BarFactoryBadMethod, ServiceLocator.ImportFirstIBarIBarFactoryBadConstructor, TestName = ServiceLocator.ImportFirstIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod)]
-        [TestCase(typeof(IEnumerable<IFoo>), ServiceLocator.FooBadConstructor, ServiceLocator.ImportMultipleIFooBadConstructor, TestName = ServiceLocator.ImportMultipleIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor)]
-        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.BarFactoryBadConstructor, ServiceLocator.ImportMultipleIBarIBarFactoryBadConstructor, TestName = ServiceLocator.ImportMultipleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor)]
-        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.BarFactoryBadMethod, ServiceLocator.ImportMultipleIBarIBarFactoryBadConstructor, TestName = ServiceLocator.ImportMultipleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod)]
+        [TestCase(typeof(IFoo), ServiceLocator.FooBadConstructor, ServiceLocator.ImportSingleIFooBadDependency, TestName = ServiceLocator.ImportSingleIFooBadDependency + ":" + ServiceLocator.FooBadConstructor)]
+        [TestCase(typeof(IBar), ServiceLocator.BarFactoryBadConstructor, ServiceLocator.ImportSingleIBarIBarFactoryBadDependency, TestName = ServiceLocator.ImportSingleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadConstructor)]
+        [TestCase(typeof(IBar), ServiceLocator.BarFactoryBadMethod, ServiceLocator.ImportSingleIBarIBarFactoryBadDependency, TestName = ServiceLocator.ImportSingleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadMethod)]
+        [TestCase(typeof(IFoo), ServiceLocator.FooBadConstructor, ServiceLocator.ImportFirstIFooBadDependency, TestName = ServiceLocator.ImportFirstIFooBadDependency + ":" + ServiceLocator.FooBadConstructor)]
+        [TestCase(typeof(IBar), ServiceLocator.BarFactoryBadConstructor, ServiceLocator.ImportFirstIBarIBarFactoryBadDependency, TestName = ServiceLocator.ImportFirstIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadConstructor)]
+        [TestCase(typeof(IBar), ServiceLocator.BarFactoryBadMethod, ServiceLocator.ImportFirstIBarIBarFactoryBadDependency, TestName = ServiceLocator.ImportFirstIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadMethod)]
+        [TestCase(typeof(IEnumerable<IFoo>), ServiceLocator.FooBadConstructor, ServiceLocator.ImportMultipleIFooBadDependency, TestName = ServiceLocator.ImportMultipleIFooBadDependency + ":" + ServiceLocator.FooBadConstructor)]
+        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.BarFactoryBadConstructor, ServiceLocator.ImportMultipleIBarIBarFactoryBadDependency, TestName = ServiceLocator.ImportMultipleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadConstructor)]
+        [TestCase(typeof(IEnumerable<IBar>), ServiceLocator.BarFactoryBadMethod, ServiceLocator.ImportMultipleIBarIBarFactoryBadDependency, TestName = ServiceLocator.ImportMultipleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadMethod)]
         public void DependenciesThatThrowExceptionsDuringCreationAreIgnored(Type serviceAbstractionType, string importExportName, string serviceName)
         {
             var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName + ":" + importExportName);

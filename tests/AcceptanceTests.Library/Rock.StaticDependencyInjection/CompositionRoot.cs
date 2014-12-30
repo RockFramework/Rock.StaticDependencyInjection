@@ -549,44 +549,44 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
         private void BadDependencyTests()
         {
             ImportSingle<IFoo>(
-                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor),
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooBadDependency + ":" + ServiceLocator.FooBadConstructor),
                 ServiceLocator.FooBadConstructor);
 
             ImportSingle<IBar, IBarFactory>(
-                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor),
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadConstructor),
                 factory => factory.GetBar(),
                 ServiceLocator.BarFactoryBadConstructor);
 
             ImportSingle<IBar, IBarFactory>(
-                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod),
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadMethod),
                 factory => factory.GetBar(),
                 ServiceLocator.BarFactoryBadMethod);
 
             ImportFirst<IFoo>(
-                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor),
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooBadDependency + ":" + ServiceLocator.FooBadConstructor),
                 ServiceLocator.FooBadConstructor);
 
             ImportFirst<IBar, IBarFactory>(
-                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor),
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadConstructor),
                 factory => factory.GetBar(),
                 ServiceLocator.BarFactoryBadConstructor);
 
             ImportFirst<IBar, IBarFactory>(
-                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod),
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadMethod),
                 factory => factory.GetBar(),
                 ServiceLocator.BarFactoryBadMethod);
 
             ImportMultiple<IFoo>(
-                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooBadConstructor + ":" + ServiceLocator.FooBadConstructor),
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooBadDependency + ":" + ServiceLocator.FooBadConstructor),
                 ServiceLocator.FooBadConstructor);
 
             ImportMultiple<IBar, IBarFactory>(
-                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadConstructor),
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadConstructor),
                 factory => factory.GetBar(),
                 ServiceLocator.BarFactoryBadConstructor);
 
             ImportMultiple<IBar, IBarFactory>(
-                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryBadConstructor + ":" + ServiceLocator.BarFactoryBadMethod),
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadMethod),
                 factory => factory.GetBar(),
                 ServiceLocator.BarFactoryBadMethod);
         }
