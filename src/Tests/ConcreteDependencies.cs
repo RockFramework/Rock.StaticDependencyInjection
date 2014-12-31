@@ -1,8 +1,6 @@
-﻿using Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDependencyInjection;
-
-namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
+﻿namespace Rock.StaticDependencyInjection.Tests
 {
-    [Export(Name = ServiceLocator.IncludeTypesFromThisAssembly)]
+    [Export(Name = DiscoveredDependency.IncludeTypesFromThisAssembly)]
     public class AbcFoo : IFoo
     {
     }
@@ -22,7 +20,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
         }
     }
 
-    [Export(Name = ServiceLocator.IncludeTypesFromThisAssembly)]
+    [Export(Name = DiscoveredDependency.IncludeTypesFromThisAssembly)]
     public class AbcBarFactory : IBarFactory
     {
         public IBar GetBar()

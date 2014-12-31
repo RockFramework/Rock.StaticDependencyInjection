@@ -1,30 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rock.StaticDependencyInjection.AcceptanceTests.Library;
 
-namespace Rock.StaticDependencyInjection.AcceptanceTests
+namespace Rock.StaticDependencyInjection.Tests
 {
     public class NonDefaultConstructorTests
     {
-        [TestCase(typeof(IFoo), typeof(NonDefaultConstructorFoo), ServiceLocator.ImportSingleIFooNonDefaultConstructor, TestName = ServiceLocator.ImportSingleIFooNonDefaultConstructor)]
-        [TestCase(typeof(IBar), typeof(NonDefaultConstructorBar), ServiceLocator.ImportSingleIBarIBarFactoryNonDefaultConstructor, TestName = ServiceLocator.ImportSingleIBarIBarFactoryNonDefaultConstructor)]
+        [TestCase(typeof(IFoo), typeof(NonDefaultConstructorFoo), DiscoveredDependency.ImportSingleIFooNonDefaultConstructor, TestName = DiscoveredDependency.ImportSingleIFooNonDefaultConstructor)]
+        [TestCase(typeof(IBar), typeof(NonDefaultConstructorBar), DiscoveredDependency.ImportSingleIBarIBarFactoryNonDefaultConstructor, TestName = DiscoveredDependency.ImportSingleIBarIBarFactoryNonDefaultConstructor)]
         public void ImportSingleCanInvokeNonDefaultPublicConstructorWithAllOptionalParameters(Type serviceAbstractionType, Type expectedServiceType, string serviceName)
         {
-            var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
+            var registeredInstance = DiscoveredDependency.Find(serviceAbstractionType, serviceName);
             Assert.That(registeredInstance, Is.InstanceOf(expectedServiceType));
         }
 
-        [TestCase(typeof(IFoo), typeof(NonDefaultConstructorFoo), ServiceLocator.ImportFirstIFooNonDefaultConstructor, TestName = ServiceLocator.ImportFirstIFooNonDefaultConstructor)]
-        [TestCase(typeof(IBar), typeof(NonDefaultConstructorBar), ServiceLocator.ImportFirstIBarIBarFactoryNonDefaultConstructor, TestName = ServiceLocator.ImportFirstIBarIBarFactoryNonDefaultConstructor)]
+        [TestCase(typeof(IFoo), typeof(NonDefaultConstructorFoo), DiscoveredDependency.ImportFirstIFooNonDefaultConstructor, TestName = DiscoveredDependency.ImportFirstIFooNonDefaultConstructor)]
+        [TestCase(typeof(IBar), typeof(NonDefaultConstructorBar), DiscoveredDependency.ImportFirstIBarIBarFactoryNonDefaultConstructor, TestName = DiscoveredDependency.ImportFirstIBarIBarFactoryNonDefaultConstructor)]
         public void ImportFirstCanInvokeNonDefaultPublicConstructorWithAllOptionalParameters(Type serviceAbstractionType, Type expectedServiceType, string serviceName)
         {
-            var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
+            var registeredInstance = DiscoveredDependency.Find(serviceAbstractionType, serviceName);
             Assert.That(registeredInstance, Is.InstanceOf(expectedServiceType));
         }
 
-        [TestCase(typeof(IEnumerable<IFoo>), new[] { typeof(NonDefaultConstructorFoo) }, ServiceLocator.ImportMultipleIFooNonDefaultConstructor, TestName = ServiceLocator.ImportMultipleIFooNonDefaultConstructor)]
-        [TestCase(typeof(IEnumerable<IBar>), new[] { typeof(NonDefaultConstructorBar) }, ServiceLocator.ImportMultipleIBarIBarFactoryNonDefaultConstructor, TestName = ServiceLocator.ImportMultipleIBarIBarFactoryNonDefaultConstructor)]
+        [TestCase(typeof(IEnumerable<IFoo>), new[] { typeof(NonDefaultConstructorFoo) }, DiscoveredDependency.ImportMultipleIFooNonDefaultConstructor, TestName = DiscoveredDependency.ImportMultipleIFooNonDefaultConstructor)]
+        [TestCase(typeof(IEnumerable<IBar>), new[] { typeof(NonDefaultConstructorBar) }, DiscoveredDependency.ImportMultipleIBarIBarFactoryNonDefaultConstructor, TestName = DiscoveredDependency.ImportMultipleIBarIBarFactoryNonDefaultConstructor)]
         public void ImportMultipleCanInvokeNonDefaultPublicConstructorWithAllOptionalParameters(Type serviceAbstractionType, Type[] expectedServiceTypes, string serviceName)
         {
             ImportMultipleTests.RunTest(serviceAbstractionType, expectedServiceTypes, serviceName);

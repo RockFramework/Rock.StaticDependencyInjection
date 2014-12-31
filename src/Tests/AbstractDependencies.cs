@@ -1,4 +1,4 @@
-﻿namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
+﻿namespace Rock.StaticDependencyInjection.Tests
 {
     public interface IFoo
     {

@@ -3,43 +3,42 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rock.StaticDependencyInjection.AcceptanceTests.Library;
 
-namespace Rock.StaticDependencyInjection.AcceptanceTests
+namespace Rock.StaticDependencyInjection.Tests
 {
     public class ImportMultipleTests
     {
-        [TestCase(typeof(IEnumerable<IFoo>), new[] { typeof(FooImplementation) }, ServiceLocator.ImportMultipleIFoo, TestName = ServiceLocator.ImportMultipleIFoo)]
-        [TestCase(typeof(IEnumerable<IBar>), new[] { typeof(BarImplementation) }, ServiceLocator.ImportMultipleIBarIBarFactory, TestName = ServiceLocator.ImportMultipleIBarIBarFactory)]
-        [TestCase(typeof(IEnumerable<FooBase>), new[] { typeof(FooInheritor) }, ServiceLocator.ImportMultipleFooBase, TestName = ServiceLocator.ImportMultipleFooBase)]
-        [TestCase(typeof(IEnumerable<BarBase>), new[] { typeof(BarInheritor) }, ServiceLocator.ImportMultipleBarBaseBarFactoryBase, TestName = ServiceLocator.ImportMultipleBarBaseBarFactoryBase)]
+        [TestCase(typeof(IEnumerable<IFoo>), new[] { typeof(FooImplementation) }, DiscoveredDependency.ImportMultipleIFoo, TestName = DiscoveredDependency.ImportMultipleIFoo)]
+        [TestCase(typeof(IEnumerable<IBar>), new[] { typeof(BarImplementation) }, DiscoveredDependency.ImportMultipleIBarIBarFactory, TestName = DiscoveredDependency.ImportMultipleIBarIBarFactory)]
+        [TestCase(typeof(IEnumerable<FooBase>), new[] { typeof(FooInheritor) }, DiscoveredDependency.ImportMultipleFooBase, TestName = DiscoveredDependency.ImportMultipleFooBase)]
+        [TestCase(typeof(IEnumerable<BarBase>), new[] { typeof(BarInheritor) }, DiscoveredDependency.ImportMultipleBarBaseBarFactoryBase, TestName = DiscoveredDependency.ImportMultipleBarBaseBarFactoryBase)]
         public void GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed(Type serviceAbstractionType, Type[] expectedServiceTypes, string serviceName)
         {
             RunTest(serviceAbstractionType, expectedServiceTypes, serviceName);
         }
 
-        [TestCase(typeof(IEnumerable<IBaz>), new[] { typeof(BazImplementation1), typeof(BazImplementation2) }, ServiceLocator.ImportMultipleIBaz, TestName = ServiceLocator.ImportMultipleIBaz)]
-        [TestCase(typeof(IEnumerable<IQux>), new[] { typeof(QuxImplementation1), typeof(QuxImplementation2) }, ServiceLocator.ImportMultipleIQuxIQuxFactory, TestName = ServiceLocator.ImportMultipleIQuxIQuxFactory)]
-        [TestCase(typeof(IEnumerable<BazBase>), new[] { typeof(BazInheritor1), typeof(BazInheritor2) }, ServiceLocator.ImportMultipleBazBase, TestName = ServiceLocator.ImportMultipleBazBase)]
-        [TestCase(typeof(IEnumerable<QuxBase>), new[] { typeof(QuxInheritor1), typeof(QuxInheritor2) }, ServiceLocator.ImportMultipleQuxBaseQuxFactoryBase, TestName = ServiceLocator.ImportMultipleQuxBaseQuxFactoryBase)]
+        [TestCase(typeof(IEnumerable<IBaz>), new[] { typeof(BazImplementation1), typeof(BazImplementation2) }, DiscoveredDependency.ImportMultipleIBaz, TestName = DiscoveredDependency.ImportMultipleIBaz)]
+        [TestCase(typeof(IEnumerable<IQux>), new[] { typeof(QuxImplementation1), typeof(QuxImplementation2) }, DiscoveredDependency.ImportMultipleIQuxIQuxFactory, TestName = DiscoveredDependency.ImportMultipleIQuxIQuxFactory)]
+        [TestCase(typeof(IEnumerable<BazBase>), new[] { typeof(BazInheritor1), typeof(BazInheritor2) }, DiscoveredDependency.ImportMultipleBazBase, TestName = DiscoveredDependency.ImportMultipleBazBase)]
+        [TestCase(typeof(IEnumerable<QuxBase>), new[] { typeof(QuxInheritor1), typeof(QuxInheritor2) }, DiscoveredDependency.ImportMultipleQuxBaseQuxFactoryBase, TestName = DiscoveredDependency.ImportMultipleQuxBaseQuxFactoryBase)]
         public void GivenMultipleImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically(Type serviceAbstractionType, Type[] expectedServiceTypes, string serviceName)
         {
             RunTest(serviceAbstractionType, expectedServiceTypes, serviceName);
         }
 
-        [TestCase(typeof(IEnumerable<IFoo>), new[] { typeof(NamedFooImplementation) }, ServiceLocator.ImportMultipleIFooNamed, TestName = ServiceLocator.ImportMultipleIFooNamed)]
-        [TestCase(typeof(IEnumerable<IBar>), new[] { typeof(NamedBarImplementation) }, ServiceLocator.ImportMultipleIBarIBarFactoryNamed, TestName = ServiceLocator.ImportMultipleIBarIBarFactoryNamed)]
-        [TestCase(typeof(IEnumerable<FooBase>), new[] { typeof(NamedFooInheritor) }, ServiceLocator.ImportMultipleFooBaseNamed, TestName = ServiceLocator.ImportMultipleFooBaseNamed)]
-        [TestCase(typeof(IEnumerable<BarBase>), new[] { typeof(NamedBarInheritor) }, ServiceLocator.ImportMultipleBarBaseBarFactoryBaseNamed, TestName = ServiceLocator.ImportMultipleBarBaseBarFactoryBaseNamed)]
+        [TestCase(typeof(IEnumerable<IFoo>), new[] { typeof(NamedFooImplementation) }, DiscoveredDependency.ImportMultipleIFooNamed, TestName = DiscoveredDependency.ImportMultipleIFooNamed)]
+        [TestCase(typeof(IEnumerable<IBar>), new[] { typeof(NamedBarImplementation) }, DiscoveredDependency.ImportMultipleIBarIBarFactoryNamed, TestName = DiscoveredDependency.ImportMultipleIBarIBarFactoryNamed)]
+        [TestCase(typeof(IEnumerable<FooBase>), new[] { typeof(NamedFooInheritor) }, DiscoveredDependency.ImportMultipleFooBaseNamed, TestName = DiscoveredDependency.ImportMultipleFooBaseNamed)]
+        [TestCase(typeof(IEnumerable<BarBase>), new[] { typeof(NamedBarInheritor) }, DiscoveredDependency.ImportMultipleBarBaseBarFactoryBaseNamed, TestName = DiscoveredDependency.ImportMultipleBarBaseBarFactoryBaseNamed)]
         public void GivenASingleNamedImplementationForTheAbstraction_ThenThatImplementationIsUsed(Type serviceAbstractionType, Type[] expectedServiceTypes, string serviceName)
         {
             RunTest(serviceAbstractionType, expectedServiceTypes, serviceName);
         }
 
-        [TestCase(typeof(IEnumerable<IBaz>), new[] { typeof(NamedBazImplementation1), typeof(NamedBazImplementation2) }, ServiceLocator.ImportMultipleIBazNamed, TestName = ServiceLocator.ImportMultipleIBazNamed)]
-        [TestCase(typeof(IEnumerable<IQux>), new[] { typeof(NamedQuxImplementation1), typeof(NamedQuxImplementation2) }, ServiceLocator.ImportMultipleIQuxIQuxFactoryNamed, TestName = ServiceLocator.ImportMultipleIQuxIQuxFactoryNamed)]
-        [TestCase(typeof(IEnumerable<BazBase>), new[] { typeof(NamedBazInheritor1), typeof(NamedBazInheritor2) }, ServiceLocator.ImportMultipleBazBaseNamed, TestName = ServiceLocator.ImportMultipleBazBaseNamed)]
-        [TestCase(typeof(IEnumerable<QuxBase>), new[] { typeof(NamedQuxInheritor1), typeof(NamedQuxInheritor2) }, ServiceLocator.ImportMultipleQuxBaseQuxFactoryBaseNamed, TestName = ServiceLocator.ImportMultipleQuxBaseQuxFactoryBaseNamed)]
+        [TestCase(typeof(IEnumerable<IBaz>), new[] { typeof(NamedBazImplementation1), typeof(NamedBazImplementation2) }, DiscoveredDependency.ImportMultipleIBazNamed, TestName = DiscoveredDependency.ImportMultipleIBazNamed)]
+        [TestCase(typeof(IEnumerable<IQux>), new[] { typeof(NamedQuxImplementation1), typeof(NamedQuxImplementation2) }, DiscoveredDependency.ImportMultipleIQuxIQuxFactoryNamed, TestName = DiscoveredDependency.ImportMultipleIQuxIQuxFactoryNamed)]
+        [TestCase(typeof(IEnumerable<BazBase>), new[] { typeof(NamedBazInheritor1), typeof(NamedBazInheritor2) }, DiscoveredDependency.ImportMultipleBazBaseNamed, TestName = DiscoveredDependency.ImportMultipleBazBaseNamed)]
+        [TestCase(typeof(IEnumerable<QuxBase>), new[] { typeof(NamedQuxInheritor1), typeof(NamedQuxInheritor2) }, DiscoveredDependency.ImportMultipleQuxBaseQuxFactoryBaseNamed, TestName = DiscoveredDependency.ImportMultipleQuxBaseQuxFactoryBaseNamed)]
         public void GivenMultipleNamedImplementationsForTheAbstraction_ThenEachImplementationIsUsedAlphabetically(Type serviceAbstractionType, Type[] expectedServiceTypes, string serviceName)
         {
             RunTest(serviceAbstractionType, expectedServiceTypes, serviceName);
@@ -48,7 +47,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         public static void RunTest(Type serviceAbstractionType, Type[] expectedServiceTypes, string serviceName)
         {
             var registeredInstances =
-                ((IEnumerable)ServiceLocator.Get(serviceAbstractionType, serviceName)).Cast<object>().ToList();
+                ((IEnumerable)DiscoveredDependency.Find(serviceAbstractionType, serviceName)).Cast<object>().ToList();
             Assert.That(registeredInstances.Count, Is.EqualTo(expectedServiceTypes.Length));
 
             var instancesEnumerator = registeredInstances.GetEnumerator();

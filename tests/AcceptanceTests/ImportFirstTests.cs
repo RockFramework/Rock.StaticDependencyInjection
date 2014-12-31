@@ -1,48 +1,47 @@
 ﻿using System;
 using NUnit.Framework;
-using Rock.StaticDependencyInjection.AcceptanceTests.Library;
 
-namespace Rock.StaticDependencyInjection.AcceptanceTests
+namespace Rock.StaticDependencyInjection.Tests
 {
     public class ImportFirstTests
     {
-        [TestCase(typeof(IFoo), typeof(FooImplementation), ServiceLocator.ImportFirstIFoo, TestName = ServiceLocator.ImportFirstIFoo)]
-        [TestCase(typeof(IBar), typeof(BarImplementation), ServiceLocator.ImportFirstIBarIBarFactory, TestName = ServiceLocator.ImportFirstIBarIBarFactory)]
-        [TestCase(typeof(FooBase), typeof(FooInheritor), ServiceLocator.ImportFirstFooBase, TestName = ServiceLocator.ImportFirstFooBase)]
-        [TestCase(typeof(BarBase), typeof(BarInheritor), ServiceLocator.ImportFirstBarBaseBarFactoryBase, TestName = ServiceLocator.ImportFirstBarBaseBarFactoryBase)]
+        [TestCase(typeof(IFoo), typeof(FooImplementation), DiscoveredDependency.ImportFirstIFoo, TestName = DiscoveredDependency.ImportFirstIFoo)]
+        [TestCase(typeof(IBar), typeof(BarImplementation), DiscoveredDependency.ImportFirstIBarIBarFactory, TestName = DiscoveredDependency.ImportFirstIBarIBarFactory)]
+        [TestCase(typeof(FooBase), typeof(FooInheritor), DiscoveredDependency.ImportFirstFooBase, TestName = DiscoveredDependency.ImportFirstFooBase)]
+        [TestCase(typeof(BarBase), typeof(BarInheritor), DiscoveredDependency.ImportFirstBarBaseBarFactoryBase, TestName = DiscoveredDependency.ImportFirstBarBaseBarFactoryBase)]
         public void GivenASingleImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed(Type serviceAbstractionType, Type expectedServiceType, string serviceName)
         {
-            var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
+            var registeredInstance = DiscoveredDependency.Find(serviceAbstractionType, serviceName);
             Assert.That(registeredInstance, Is.InstanceOf(expectedServiceType));
         }
 
-        [TestCase(typeof(IBaz), typeof(BazImplementation1), ServiceLocator.ImportFirstIBaz, TestName = ServiceLocator.ImportFirstIBaz)]
-        [TestCase(typeof(IQux), typeof(QuxImplementation1), ServiceLocator.ImportFirstIQuxIQuxFactory, TestName = ServiceLocator.ImportFirstIQuxIQuxFactory)]
-        [TestCase(typeof(BazBase), typeof(BazInheritor1), ServiceLocator.ImportFirstBazBase, TestName = ServiceLocator.ImportFirstBazBase)]
-        [TestCase(typeof(QuxBase), typeof(QuxInheritor1), ServiceLocator.ImportFirstQuxBaseQuxFactoryBase, TestName = ServiceLocator.ImportFirstQuxBaseQuxFactoryBase)]
+        [TestCase(typeof(IBaz), typeof(BazImplementation1), DiscoveredDependency.ImportFirstIBaz, TestName = DiscoveredDependency.ImportFirstIBaz)]
+        [TestCase(typeof(IQux), typeof(QuxImplementation1), DiscoveredDependency.ImportFirstIQuxIQuxFactory, TestName = DiscoveredDependency.ImportFirstIQuxIQuxFactory)]
+        [TestCase(typeof(BazBase), typeof(BazInheritor1), DiscoveredDependency.ImportFirstBazBase, TestName = DiscoveredDependency.ImportFirstBazBase)]
+        [TestCase(typeof(QuxBase), typeof(QuxInheritor1), DiscoveredDependency.ImportFirstQuxBaseQuxFactoryBase, TestName = DiscoveredDependency.ImportFirstQuxBaseQuxFactoryBase)]
         public void GivenMultipleImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed(Type serviceAbstractionType, Type expectedServiceType, string serviceName)
         {
-            var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
+            var registeredInstance = DiscoveredDependency.Find(serviceAbstractionType, serviceName);
             Assert.That(registeredInstance, Is.InstanceOf(expectedServiceType));
         }
 
-        [TestCase(typeof(IFoo), typeof(NamedFooImplementation), ServiceLocator.ImportFirstIFooNamed, TestName = ServiceLocator.ImportFirstIFooNamed)]
-        [TestCase(typeof(IBar), typeof(NamedBarImplementation), ServiceLocator.ImportFirstIBarIBarFactoryNamed, TestName = ServiceLocator.ImportFirstIBarIBarFactoryNamed)]
-        [TestCase(typeof(FooBase), typeof(NamedFooInheritor), ServiceLocator.ImportFirstFooBaseNamed, TestName = ServiceLocator.ImportFirstFooBaseNamed)]
-        [TestCase(typeof(BarBase), typeof(NamedBarInheritor), ServiceLocator.ImportFirstBarBaseBarFactoryBaseNamed, TestName = ServiceLocator.ImportFirstBarBaseBarFactoryBaseNamed)]
+        [TestCase(typeof(IFoo), typeof(NamedFooImplementation), DiscoveredDependency.ImportFirstIFooNamed, TestName = DiscoveredDependency.ImportFirstIFooNamed)]
+        [TestCase(typeof(IBar), typeof(NamedBarImplementation), DiscoveredDependency.ImportFirstIBarIBarFactoryNamed, TestName = DiscoveredDependency.ImportFirstIBarIBarFactoryNamed)]
+        [TestCase(typeof(FooBase), typeof(NamedFooInheritor), DiscoveredDependency.ImportFirstFooBaseNamed, TestName = DiscoveredDependency.ImportFirstFooBaseNamed)]
+        [TestCase(typeof(BarBase), typeof(NamedBarInheritor), DiscoveredDependency.ImportFirstBarBaseBarFactoryBaseNamed, TestName = DiscoveredDependency.ImportFirstBarBaseBarFactoryBaseNamed)]
         public void GivenASingleNamedImplementationForTheAbstraction_ThenThatSingleImplementationIsUsed(Type serviceAbstractionType, Type expectedServiceType, string serviceName)
         {
-            var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
+            var registeredInstance = DiscoveredDependency.Find(serviceAbstractionType, serviceName);
             Assert.That(registeredInstance, Is.InstanceOf(expectedServiceType));
         }
 
-        [TestCase(typeof(IBaz), typeof(NamedBazImplementation1), ServiceLocator.ImportFirstIBazNamed, TestName = ServiceLocator.ImportFirstIBazNamed)]
-        [TestCase(typeof(IQux), typeof(NamedQuxImplementation1), ServiceLocator.ImportFirstIQuxIQuxFactoryNamed, TestName = ServiceLocator.ImportFirstIQuxIQuxFactoryNamed)]
-        [TestCase(typeof(BazBase), typeof(NamedBazInheritor1), ServiceLocator.ImportFirstBazBaseNamed, TestName = ServiceLocator.ImportFirstBazBaseNamed)]
-        [TestCase(typeof(QuxBase), typeof(NamedQuxInheritor1), ServiceLocator.ImportFirstQuxBaseQuxFactoryBaseNamed, TestName = ServiceLocator.ImportFirstQuxBaseQuxFactoryBaseNamed)]
+        [TestCase(typeof(IBaz), typeof(NamedBazImplementation1), DiscoveredDependency.ImportFirstIBazNamed, TestName = DiscoveredDependency.ImportFirstIBazNamed)]
+        [TestCase(typeof(IQux), typeof(NamedQuxImplementation1), DiscoveredDependency.ImportFirstIQuxIQuxFactoryNamed, TestName = DiscoveredDependency.ImportFirstIQuxIQuxFactoryNamed)]
+        [TestCase(typeof(BazBase), typeof(NamedBazInheritor1), DiscoveredDependency.ImportFirstBazBaseNamed, TestName = DiscoveredDependency.ImportFirstBazBaseNamed)]
+        [TestCase(typeof(QuxBase), typeof(NamedQuxInheritor1), DiscoveredDependency.ImportFirstQuxBaseQuxFactoryBaseNamed, TestName = DiscoveredDependency.ImportFirstQuxBaseQuxFactoryBaseNamed)]
         public void GivenMultipleNamedImplementationForTheAbstraction_ThenTheFirstAlphabeticalImplementationIsUsed(Type serviceAbstractionType, Type expectedServiceType, string serviceName)
         {
-            var registeredInstance = ServiceLocator.Get(serviceAbstractionType, serviceName);
+            var registeredInstance = DiscoveredDependency.Find(serviceAbstractionType, serviceName);
             Assert.That(registeredInstance, Is.InstanceOf(expectedServiceType));
         }
     }

@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{ADEDDFA8-B635-4DEE-9DB4-06B12F2E0DC3}</ProjectGuid>
+    <ProjectGuid>{AB96E354-FEA2-444D-84EC-E952635AB648}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Rock.StaticDependencyInjection.AcceptanceTests.Library</RootNamespace>
-    <AssemblyName>Rock.StaticDependencyInjection.AcceptanceTests.Library</AssemblyName>
+    <RootNamespace>Rock.StaticDependencyInjection.Tests</RootNamespace>
+    <AssemblyName>Rock.StaticDependencyInjection.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <UseInjectModuleInitializer Condition="'$(UseInjectModuleInitializer)' == ''">true</UseInjectModuleInitializer>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,22 +42,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BadDependencyTests.cs" />
     <Compile Include="ConcreteServices.cs" />
-    <Compile Include="AbstractServices.cs" />
+    <Compile Include="DuplicateExportTests.cs" />
+    <Compile Include="ImportMultipleTests.cs" />
+    <Compile Include="ImportFirstTests.cs" />
+    <Compile Include="ImportOptionsParameterTests.cs" />
+    <Compile Include="NonDefaultConstructorTests.cs" />
+    <Compile Include="PriorityTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rock.StaticDependencyInjection\CompositionRoot.cs" />
-    <Compile Include="Rock.StaticDependencyInjection\ExportAttribute.cs" />
-    <Compile Include="Rock.StaticDependencyInjection\ModuleInitializer.cs" />
-    <Compile Include="Rock.StaticDependencyInjection\StaticDependencyInjection.Generated.cs" />
-    <Compile Include="ServiceLocator.cs" />
+    <Compile Include="ImportSingleTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Rock.StaticDependencyInjection.csproj">
+      <Project>{3b90f15b-2356-4c03-bb44-88de40b65593}</Project>
+      <Name>Rock.StaticDependencyInjection</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="InjectModuleInitializer" AfterTargets="AfterBuild" Condition="'$(UseInjectModuleInitializer)' == 'true'">
-    <Exec Command="..\..\packages\Rock.StaticDependencyInjection.1.0.0\tools\InjectModuleInitializer.exe &quot;$(TargetPath)&quot;" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

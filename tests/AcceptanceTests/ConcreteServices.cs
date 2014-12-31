@@ -1,9 +1,6 @@
 ﻿using System;
-using Rock.StaticDependencyInjection.AcceptanceTests;
-using Rock.StaticDependencyInjection.AcceptanceTests.Library;
-using Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDependencyInjection;
 
-namespace Rock.StaticDependencyInjection.AcceptanceTests
+namespace Rock.StaticDependencyInjection.Tests
 {
     #region Implicit Exports
 
@@ -351,12 +348,12 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region AllowNonPublicClasses Exports
 
-    [Export(Name = ServiceLocator.AllowNonPublicClasses)]
+    [Export(Name = DiscoveredDependency.AllowNonPublicClasses)]
     public class PublicFoo : IFoo
     {
     }
 
-    [Export(Name = ServiceLocator.AllowNonPublicClasses)]
+    [Export(Name = DiscoveredDependency.AllowNonPublicClasses)]
     internal class NonPublicFoo : IFoo
     {
     }
@@ -391,7 +388,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(Name = ServiceLocator.AllowNonPublicClasses)]
+    [Export(Name = DiscoveredDependency.AllowNonPublicClasses)]
     public class PublicBarFactory : IBarFactory
     {
         public IBar GetBar()
@@ -400,7 +397,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(Name = ServiceLocator.AllowNonPublicClasses)]
+    [Export(Name = DiscoveredDependency.AllowNonPublicClasses)]
     internal class NonPublicBarFactory : IBarFactory
     {
         public IBar GetBar()
@@ -413,12 +410,12 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region PreferTTargetType Exports
 
-    [Export(Name = ServiceLocator.PreferTTargetType)]
+    [Export(Name = DiscoveredDependency.PreferTTargetType)]
     public class TargetTypeBar : IBar
     {
     }
 
-    [Export(Name = ServiceLocator.PreferTTargetType)]
+    [Export(Name = DiscoveredDependency.PreferTTargetType)]
     public class FactoryTypeBarFactory : IBarFactory
     {
         public IBar GetBar()
@@ -446,7 +443,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region IncludeTypesFromThisAssembly Exports
 
-    [Export(Name = ServiceLocator.IncludeTypesFromThisAssembly)]
+    [Export(Name = DiscoveredDependency.IncludeTypesFromThisAssembly)]
     public class XyzFoo : IFoo
     {
     }
@@ -466,7 +463,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(Name = ServiceLocator.IncludeTypesFromThisAssembly)]
+    [Export(Name = DiscoveredDependency.IncludeTypesFromThisAssembly)]
     public class XyzBarFactory : IBarFactory
     {
         public IBar GetBar()
@@ -479,17 +476,17 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region ExportComparer Exports
 
-    [Export(Name = ServiceLocator.ExportComparer)]
+    [Export(Name = DiscoveredDependency.ExportComparer)]
     public class FooExportComparer1 : IFoo
     {
     }
 
-    [Export(Name = ServiceLocator.ExportComparer)]
+    [Export(Name = DiscoveredDependency.ExportComparer)]
     public class FooExportComparer2 : IFoo
     {
     }
 
-    [Export(Name = ServiceLocator.ExportComparer)]
+    [Export(Name = DiscoveredDependency.ExportComparer)]
     public class FooExportComparer3 : IFoo
     {
     }
@@ -539,7 +536,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(Name = ServiceLocator.ExportComparer)]
+    [Export(Name = DiscoveredDependency.ExportComparer)]
     public class BarFactoryExportComparer1 : IBarFactory
     {
         public IBar GetBar()
@@ -548,7 +545,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(Name = ServiceLocator.ExportComparer)]
+    [Export(Name = DiscoveredDependency.ExportComparer)]
     public class BarFactoryExportComparer2 : IBarFactory
     {
         public IBar GetBar()
@@ -557,7 +554,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(Name = ServiceLocator.ExportComparer)]
+    [Export(Name = DiscoveredDependency.ExportComparer)]
     public class BarFactoryExportComparer3 : IBarFactory
     {
         public IBar GetBar()
@@ -570,17 +567,17 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region SingleHighestPriority Exports
 
-    [Export(-30, Name = ServiceLocator.SingleHighestPriority)]
+    [Export(-30, Name = DiscoveredDependency.SingleHighestPriority)]
     public class FooSingleHighestPriority1 : IFoo
     {
     }
 
-    [Export(-20, Name = ServiceLocator.SingleHighestPriority)]
+    [Export(-20, Name = DiscoveredDependency.SingleHighestPriority)]
     public class FooSingleHighestPriority2 : IFoo
     {
     }
 
-    [Export(-10, Name = ServiceLocator.SingleHighestPriority)]
+    [Export(-10, Name = DiscoveredDependency.SingleHighestPriority)]
     public class FooSingleHighestPriority3 : IFoo
     {
     }
@@ -630,7 +627,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-30, Name = ServiceLocator.SingleHighestPriority)]
+    [Export(-30, Name = DiscoveredDependency.SingleHighestPriority)]
     public class BarFactorySingleHighestPriority1 : IBarFactory
     {
         public IBar GetBar()
@@ -639,7 +636,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-20, Name = ServiceLocator.SingleHighestPriority)]
+    [Export(-20, Name = DiscoveredDependency.SingleHighestPriority)]
     public class BarFactorySingleHighestPriority2 : IBarFactory
     {
         public IBar GetBar()
@@ -648,7 +645,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-10, Name = ServiceLocator.SingleHighestPriority)]
+    [Export(-10, Name = DiscoveredDependency.SingleHighestPriority)]
     public class BarFactorySingleHighestPriority3 : IBarFactory
     {
         public IBar GetBar()
@@ -661,12 +658,12 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region MultipleHighestPriority Exports
 
-    [Export(-100, Name = ServiceLocator.MultipleHighestPriority)]
+    [Export(-100, Name = DiscoveredDependency.MultipleHighestPriority)]
     public class FooMultipleHighestPriority1 : IFoo
     {
     }
 
-    [Export(-100, Name = ServiceLocator.MultipleHighestPriority)]
+    [Export(-100, Name = DiscoveredDependency.MultipleHighestPriority)]
     public class FooMultipleHighestPriority2 : IFoo
     {
     }
@@ -701,7 +698,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-100, Name = ServiceLocator.MultipleHighestPriority)]
+    [Export(-100, Name = DiscoveredDependency.MultipleHighestPriority)]
     public class BarFactoryMultipleHighestPriority1 : IBarFactory
     {
         public IBar GetBar()
@@ -710,7 +707,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-100, Name = ServiceLocator.MultipleHighestPriority)]
+    [Export(-100, Name = DiscoveredDependency.MultipleHighestPriority)]
     public class BarFactoryMultipleHighestPriority2 : IBarFactory
     {
         public IBar GetBar()
@@ -723,9 +720,9 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region DuplicateExport Exports
 
-    [Export(-300, Name = ServiceLocator.DuplicateExport)]
-    [Export(-200, Name = ServiceLocator.DuplicateExport)]
-    [Export(-200, Name = ServiceLocator.DuplicateExport)]
+    [Export(-300, Name = DiscoveredDependency.DuplicateExport)]
+    [Export(-200, Name = DiscoveredDependency.DuplicateExport)]
+    [Export(-200, Name = DiscoveredDependency.DuplicateExport)]
     public class DuplicateExportFoo : IFoo
     {
     }
@@ -745,9 +742,9 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-300, Name = ServiceLocator.DuplicateExport)]
-    [Export(-200, Name = ServiceLocator.DuplicateExport)]
-    [Export(-200, Name = ServiceLocator.DuplicateExport)]
+    [Export(-300, Name = DiscoveredDependency.DuplicateExport)]
+    [Export(-200, Name = DiscoveredDependency.DuplicateExport)]
+    [Export(-200, Name = DiscoveredDependency.DuplicateExport)]
     public class DuplicateExportBarFactory : IBarFactory
     {
         public IBar GetBar()
@@ -760,7 +757,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region Non-Default Constructor Exports
 
-    [Export(-400, Name = ServiceLocator.NonDefaultConstructor)]
+    [Export(-400, Name = DiscoveredDependency.NonDefaultConstructor)]
     public class NonDefaultConstructorFoo : IFoo
     {
         private readonly int _value;
@@ -791,7 +788,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-400, Name = ServiceLocator.NonDefaultConstructor)]
+    [Export(-400, Name = DiscoveredDependency.NonDefaultConstructor)]
     public class NonDefaultConstructorBarFactory : IBarFactory
     {
         private readonly int _value;
@@ -811,7 +808,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
 
     #region Dependencies That Throw During Construction
 
-    [Export(-500, Name = ServiceLocator.FooBadConstructor)]
+    [Export(-500, Name = DiscoveredDependency.FooBadConstructor)]
     public class FooBadConstructor : IFoo
     {
         public FooBadConstructor()
@@ -820,7 +817,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-500, Name = ServiceLocator.BarFactoryBadConstructor)]
+    [Export(-500, Name = DiscoveredDependency.BarFactoryBadConstructor)]
     public class BarFactoryBadConstructor : IBarFactory
     {
         public BarFactoryBadConstructor()
@@ -834,7 +831,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         }
     }
 
-    [Export(-500, Name = ServiceLocator.BarFactoryBadMethod)]
+    [Export(-500, Name = DiscoveredDependency.BarFactoryBadMethod)]
     public class BarFactoryBadMethod : IBarFactory
     {
         public IBar GetBar()

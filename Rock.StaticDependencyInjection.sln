@@ -5,13 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.StaticDependencyInjection", "src\Rock.StaticDependencyInjection.csproj", "{3B90F15B-2356-4C03-BB44-88DE40B65593}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApplication", "samples\ExampleApplication.csproj", "{CE25ABF9-DBA2-49C9-B9B2-4B1499942889}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E92C153E-B6E7-40CF-96E9-42A831023F8A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcceptanceTests", "tests\AcceptanceTests\AcceptanceTests.csproj", "{AB96E354-FEA2-444D-84EC-E952635AB648}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AcceptanceTests.Library", "tests\AcceptanceTests.Library\AcceptanceTests.Library.csproj", "{ADEDDFA8-B635-4DEE-9DB4-06B12F2E0DC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.StaticDependencyInjection.Tests", "tests\AcceptanceTests\Rock.StaticDependencyInjection.Tests.csproj", "{AB96E354-FEA2-444D-84EC-E952635AB648}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,24 +17,12 @@ Global
 		{3B90F15B-2356-4C03-BB44-88DE40B65593}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B90F15B-2356-4C03-BB44-88DE40B65593}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B90F15B-2356-4C03-BB44-88DE40B65593}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE25ABF9-DBA2-49C9-B9B2-4B1499942889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE25ABF9-DBA2-49C9-B9B2-4B1499942889}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE25ABF9-DBA2-49C9-B9B2-4B1499942889}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE25ABF9-DBA2-49C9-B9B2-4B1499942889}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AB96E354-FEA2-444D-84EC-E952635AB648}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AB96E354-FEA2-444D-84EC-E952635AB648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB96E354-FEA2-444D-84EC-E952635AB648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB96E354-FEA2-444D-84EC-E952635AB648}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ADEDDFA8-B635-4DEE-9DB4-06B12F2E0DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ADEDDFA8-B635-4DEE-9DB4-06B12F2E0DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ADEDDFA8-B635-4DEE-9DB4-06B12F2E0DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ADEDDFA8-B635-4DEE-9DB4-06B12F2E0DC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{AB96E354-FEA2-444D-84EC-E952635AB648} = {E92C153E-B6E7-40CF-96E9-42A831023F8A}
-		{ADEDDFA8-B635-4DEE-9DB4-06B12F2E0DC3} = {E92C153E-B6E7-40CF-96E9-42A831023F8A}
 	EndGlobalSection
 EndGlobal

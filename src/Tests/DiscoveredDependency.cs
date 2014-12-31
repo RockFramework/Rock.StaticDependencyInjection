@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
+namespace Rock.StaticDependencyInjection.Tests
 {
-    public static class ServiceLocator
+    public static class DiscoveredDependency
     {
         public const string MyName = "MyName";
 
@@ -151,7 +151,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
         public const string ImportMultipleIFooDisabled = "ImportMultiple<IFoo>(Disabled)";
         public const string ImportMultipleIBarIBarFactoryDisabled = "ImportMultiple<IBar, IBarFactory>(Disabled)";
 
-        private static readonly Dictionary<Tuple<Type, string>, object> _registeredInstances = new Dictionary<Tuple<Type, string>, object>(); 
+        private static readonly Dictionary<Tuple<Type, string>, object> _registeredInstances = new Dictionary<Tuple<Type, string>, object>();
 
         public static void Register<T>(T instance, string name)
             where T : class
@@ -166,7 +166,14 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library
             _registeredInstances[key] = instance;
         }
 
-        public static object Get(Type type, string name)
+        /// <summary>
+        /// Finds the registered instance for the given type and name. If none is found,
+        /// null is returned.
+        /// </summary>
+        /// <param name="type">The type of the instance to return.</param>
+        /// <param name="name">The registered name of the instance to return.</param>
+        /// <returns>The registered instance. If none was registered with that exact type and name combination, null is returned</returns>
+        public static object Find(Type type, string name)
         {
             object instance;
 
