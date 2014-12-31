@@ -9,13 +9,13 @@ namespace Rock.StaticDependencyInjection
 {
     internal abstract class CompositionRootBase
     {
-        private readonly ConcurrentDictionary<string, ICollection<Type>> _candidateTypesCache;
-        private readonly ConcurrentDictionary<string, ConcurrentDictionary<string, IEnumerable<string>>> _candidateTypeNamesByTargetTypeNameCache;
+        private readonly ConcurrentDictionary<Tuple<string, bool>, ICollection<Type>> _candidateTypesCache;
+        private readonly ConcurrentDictionary<string, ConcurrentDictionary<Tuple<string, string, bool, bool>, IEnumerable<string>>> _candidateTypeNamesByTargetTypeNameCache;
 
         protected CompositionRootBase()
         {
-            _candidateTypesCache = new ConcurrentDictionary<string, ICollection<Type>>();
-            _candidateTypeNamesByTargetTypeNameCache = new ConcurrentDictionary<string, ConcurrentDictionary<string, IEnumerable<string>>>();
+            _candidateTypesCache = new ConcurrentDictionary<Tuple<string, bool>, ICollection<Type>>();
+            _candidateTypeNamesByTargetTypeNameCache = new ConcurrentDictionary<string, ConcurrentDictionary<Tuple<string, string, bool, bool>, IEnumerable<string>>>();
         }
 
         /// <summary>
@@ -27,28 +27,13 @@ namespace Rock.StaticDependencyInjection
         public abstract void Bootstrap();
 
         /// <summary>
-        /// Return a metadata object that describes the export operation for a type.
+        /// Return a collection of metadata objects that describe the export operations for a type.
         /// </summary>
         /// <param name="type">The type to get export metadata.</param>
-        /// <returns>A metadata object that describes an export operation.</returns>
-        protected virtual ExportInfo GetExportInfo(Type type)
-        {
-            return new ExportInfo(type);
-        }
-
-        /// <summary>
-        /// Return a collection of metadata objects that correspond to the attributes.
-        /// Use the <see cref="Extensions.AsAttributes{TAttribute}"/> extension method
-        /// to convert applicable CustomAttributeData objects to the desired attribyte type.
-        /// </summary>
-        /// <param name="assemblyAttributeDataCollection">
-        /// The collection of attribute data describing attributes that decorate an assembly.
-        /// </param>
         /// <returns>A collection of metadata objects that describe export operations.</returns>
-        protected virtual IEnumerable<ExportInfo> GetExportInfos(
-            IEnumerable<CustomAttributeData> assemblyAttributeDataCollection)
+        protected virtual IEnumerable<ExportInfo> GetExportInfos(Type type)
         {
-            yield break;
+            yield return new ExportInfo(type);
         }
 
         /// <summary>
@@ -467,16 +452,18 @@ namespace Rock.StaticDependencyInjection
             }
             else
             {
-                isPreferredType = GetIsTargetTypeFunc(import, import.FactoryType);
+                if (import.Options.PreferTTargetType)
+                {
+                    isPreferredType = GetIsTargetTypeFunc(import.TargetType, import.Options.AllowNonPublicClasses);
+                }
+                else
+                {
+                    isPreferredType = GetIsTargetTypeFunc(import.FactoryType, import.Options.AllowNonPublicClasses);
+                }
             }
 
             var prioritizedGroupsOfCandidateTypes =
-                candidateTypeNames.Select(GetExportInfo)
-                    .Concat(
-                        LoadExportInfosFromAssemblyAttributes(
-                            import.TargetType,
-                            import.Options.DirectoryPaths,
-                            import.Options.IncludeTypesFromThisAssembly))
+                candidateTypeNames.SelectMany(GetExportInfos)
                     .Where(export =>
                         export != null
                         && !export.Disabled
@@ -500,8 +487,7 @@ namespace Rock.StaticDependencyInjection
                 {
                     if (uniqueExports.Any(uniqueExport =>
                         export.TargetClass == uniqueExport.TargetClass
-                        && export.Name == uniqueExport.Name
-                        && export.Priority == uniqueExport.Priority))
+                        && export.Name == uniqueExport.Name))
                     {
                         exportsToRemove.Add(export);
                     }
@@ -542,52 +528,6 @@ namespace Rock.StaticDependencyInjection
             }
 
             return export.Name == import.Name || import.Name == null;
-        }
-
-        private IEnumerable<ExportInfo> LoadExportInfosFromAssemblyAttributes(
-            Type targetType,
-            IEnumerable<string> directoryPaths,
-            bool includeTypesFromThisAssembly)
-        {
-            try
-            {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomainOnReflectionOnlyAssemblyResolve;
-
-                return
-                    GetAssemblyFiles(directoryPaths)
-                        .SelectMany(assemblyFile =>
-                            LoadExportInfos(assemblyFile, targetType, includeTypesFromThisAssembly))
-                        .ToList();
-            }
-            finally
-            {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= AppDomainOnReflectionOnlyAssemblyResolve;
-            }
-        }
-
-        private IEnumerable<ExportInfo> LoadExportInfos(
-            string assemblyFile,
-            Type targetType,
-            bool includeTypesFromThisAssembly)
-        {
-            try
-            {
-                var assembly = Assembly.ReflectionOnlyLoadFrom(assemblyFile);
-
-                if (!includeTypesFromThisAssembly
-                    && assembly.FullName == typeof(CompositionRootBase).Assembly.FullName)
-                {
-                    return Enumerable.Empty<ExportInfo>();
-                }
-
-                return
-                    GetExportInfos(CustomAttributeData.GetCustomAttributes(assembly))
-                        .Where(export => export.TargetClass.AssemblyQualifiedName == targetType.AssemblyQualifiedName);
-            }
-            catch
-            {
-                return Enumerable.Empty<ExportInfo>();
-            }
         }
 
         private static Type ChooseCandidateType(
@@ -635,7 +575,7 @@ namespace Rock.StaticDependencyInjection
             return null;
         }
 
-        private ExportInfo GetExportInfo(string assemblyQualifiedName)
+        private IEnumerable<ExportInfo> GetExportInfos(string assemblyQualifiedName)
         {
             try
             {
@@ -646,7 +586,7 @@ namespace Rock.StaticDependencyInjection
                     return null;
                 }
 
-                return GetExportInfo(type);
+                return GetExportInfos(type);
             }
             catch
             {
@@ -659,18 +599,24 @@ namespace Rock.StaticDependencyInjection
             var candidateTypeNamesCache =
                 _candidateTypeNamesByTargetTypeNameCache.GetOrAdd(
                     import.TargetTypeName,
-                    _ => new ConcurrentDictionary<string, IEnumerable<string>>());
+                    _ => new ConcurrentDictionary<Tuple<string, string, bool, bool>, IEnumerable<string>>());
+
+            var key = Tuple.Create(
+                import.TargetTypeName,
+                import.FactoryTypeName,
+                import.Options.AllowNonPublicClasses,
+                import.Options.IncludeTypesFromThisAssembly);
 
             var candidateTypeNames =
                 candidateTypeNamesCache.GetOrAdd(
-                    import.TargetTypeName,
+                    key,
                     _ =>
                     {
-                        var isTargetType = GetIsTargetTypeFunc(import, import.TargetType);
+                        var isTargetType = GetIsTargetTypeFunc(import.TargetType, import.Options.AllowNonPublicClasses);
 
                         if (import.FactoryType != null)
                         {
-                            var isFactoryType = GetIsTargetTypeFunc(import, import.FactoryType);
+                            var isFactoryType = GetIsTargetTypeFunc(import.FactoryType, import.Options.AllowNonPublicClasses);
                             var isTargetTypeLocal = isTargetType;
 
                             isTargetType = type => isTargetTypeLocal(type) || isFactoryType(type);
@@ -678,8 +624,8 @@ namespace Rock.StaticDependencyInjection
 
                         var candidateTypes =
                             _candidateTypesCache.GetOrAdd(
-                                string.Join("|", import.Options.DirectoryPaths),
-                                __ => GetCandidateTypes(import.Options.DirectoryPaths));
+                                Tuple.Create(string.Join("|", import.Options.DirectoryPaths), import.Options.IncludeTypesFromThisAssembly),
+                                __ => GetCandidateTypes(import.Options.DirectoryPaths, import.Options.IncludeTypesFromThisAssembly));
 
                         return
                             candidateTypes
@@ -691,7 +637,7 @@ namespace Rock.StaticDependencyInjection
             return candidateTypeNames;
         }
 
-        private static Func<Type, bool> GetIsTargetTypeFunc(ImportInfo import, Type targetType)
+        private static Func<Type, bool> GetIsTargetTypeFunc(Type targetType, bool allowNonPublicClasses)
         {
             var targetTypeName = targetType.AssemblyQualifiedName;
 
@@ -703,7 +649,7 @@ namespace Rock.StaticDependencyInjection
             if (targetType.IsInterface)
             {
                 return typeInQuestion =>
-                    (typeInQuestion.IsPublic || import.Options.AllowNonPublicClasses)
+                    (typeInQuestion.IsPublic || allowNonPublicClasses)
                     && typeInQuestion.GetInterfaces().Any(i => i.AssemblyQualifiedName == targetTypeName);
             }
 
@@ -730,12 +676,12 @@ namespace Rock.StaticDependencyInjection
             return typeInQuestion => false;
         }
 
-        private ICollection<Type> GetCandidateTypes(IEnumerable<string> directoryPaths)
+        private ICollection<Type> GetCandidateTypes(IEnumerable<string> directoryPaths, bool includeTypesFromThisAssembly)
         {
             try
             {
                 AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomainOnReflectionOnlyAssemblyResolve;
-                return GetAssemblyFiles(directoryPaths).SelectMany(LoadCandidateTypes).ToList();
+                return GetAssemblyFiles(directoryPaths, includeTypesFromThisAssembly).SelectMany(x => LoadCandidateTypes(x, includeTypesFromThisAssembly)).ToList();
             }
             finally
             {
@@ -748,7 +694,7 @@ namespace Rock.StaticDependencyInjection
             return Assembly.ReflectionOnlyLoad(args.Name);
         }
 
-        private static IEnumerable<string> GetAssemblyFiles(IEnumerable<string> directoryPaths)
+        private static IEnumerable<string> GetAssemblyFiles(IEnumerable<string> directoryPaths, bool includeTypesFromThisAssembly)
         {
             foreach (var directoryPath in directoryPaths)
             {
@@ -781,14 +727,14 @@ namespace Rock.StaticDependencyInjection
             }
         }
 
-        private static IEnumerable<Type> LoadCandidateTypes(string assemblyFile)
+        private static IEnumerable<Type> LoadCandidateTypes(string assemblyFile, bool includeTypesFromThisAssembly)
         {
             try
             {
                 var assembly = Assembly.ReflectionOnlyLoadFrom(assemblyFile);
 
-                // Don't look here.
-                if (assembly.FullName == typeof(CompositionRootBase).Assembly.FullName)
+                if (!includeTypesFromThisAssembly
+                    && assembly.FullName == typeof(CompositionRootBase).Assembly.FullName)
                 {
                     return Enumerable.Empty<Type>();
                 }

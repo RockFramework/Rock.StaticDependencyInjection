@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 
 namespace Rock.StaticDependencyInjection
 {
@@ -67,35 +64,6 @@ namespace Rock.StaticDependencyInjection
                     Disabled = attribute.Disabled,
                     Name = attribute.Name
                 };
-        }
-
-        /// <summary>
-        /// Return a collection of metadata objects that correspond to the attributes.
-        /// Use the <see cref="Extensions.AsAttributes{TAttribute}"/> extension method
-        /// to convert applicable CustomAttributeData objects to the desired attribyte type.
-        /// </summary>
-        /// <param name="assemblyAttributeDataCollection">
-        /// The collection of attribute data describing attributes that decorate an assembly.
-        /// </param>
-        /// <returns>A collection of metadata objects that describe export operations.</returns>
-        protected override IEnumerable<ExportInfo> GetExportInfos(
-            IEnumerable<CustomAttributeData> assemblyAttributeDataCollection)
-        {
-            // Modify this method if your library needs to support a different
-            // export mechanism that inspects assembly attributes.
-            // 
-            // Remove this method if your library should not support using
-            // assembly attributes as an export mechanism.
-
-            return
-                assemblyAttributeDataCollection.AsAttributes<ExportExternalAttribute>()
-                    .Where(attribute => attribute.IsValidForAssemblyAttribute)
-                    .Select(attribute =>
-                        new ExportInfo(attribute.ClassType, attribute.Priority)
-                        {
-                            Disabled = attribute.Disabled,
-                            Name = attribute.Name
-                        });
         }
         // Rock.StaticDependencyInjection: BEGIN EXAMPLE
         protected override ImportOptions GetDefaultImportOptions()
