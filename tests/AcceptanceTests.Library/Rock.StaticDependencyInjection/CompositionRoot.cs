@@ -34,6 +34,7 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             DuplicateExportTests();
             NonDefaultConstructorTests();
             BadDependencyTests();
+            DisabledExportTests();
         }
 
         private void ImportSingleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed()
@@ -589,6 +590,36 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                 bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryBadDependency + ":" + ServiceLocator.BarFactoryBadMethod),
                 factory => factory.GetBar(),
                 ServiceLocator.BarFactoryBadMethod);
+        }
+
+        private void DisabledExportTests()
+        {
+            ImportSingle<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportSingleIFooDisabled),
+                ServiceLocator.Disabled);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportSingleIBarIBarFactoryDisabled),
+                factory => factory.GetBar(),
+                ServiceLocator.Disabled);
+
+            ImportFirst<IFoo>(
+                foo => ServiceLocator.Register(foo, ServiceLocator.ImportFirstIFooDisabled),
+                ServiceLocator.Disabled);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => ServiceLocator.Register(bar, ServiceLocator.ImportFirstIBarIBarFactoryDisabled),
+                factory => factory.GetBar(),
+                ServiceLocator.Disabled);
+
+            ImportMultiple<IFoo>(
+                foos => ServiceLocator.Register(foos, ServiceLocator.ImportMultipleIFooDisabled),
+                ServiceLocator.Disabled);
+
+            ImportMultiple<IBar, IBarFactory>(
+                bars => ServiceLocator.Register(bars, ServiceLocator.ImportMultipleIBarIBarFactoryDisabled),
+                factory => factory.GetBar(),
+                ServiceLocator.Disabled);
         }
 
         protected override IEnumerable<ExportInfo> GetExportInfos(Type type)

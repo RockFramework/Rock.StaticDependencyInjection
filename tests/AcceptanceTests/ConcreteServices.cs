@@ -1,4 +1,5 @@
 ﻿using System;
+using Rock.StaticDependencyInjection.AcceptanceTests;
 using Rock.StaticDependencyInjection.AcceptanceTests.Library;
 using Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDependencyInjection;
 
@@ -839,6 +840,39 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests
         public IBar GetBar()
         {
             throw new Exception("Bad things happened.");
+        }
+    }
+
+    #endregion
+
+    #region Disabled Exports
+
+    [Export(Disabled = true)]
+    public class DisabledFoo : IFoo
+    {
+    }
+
+    public class DisabledBar : IBar
+    {
+        private readonly int _value;
+
+        public DisabledBar(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Disabled = true)]
+    public class DisabledBarFactory : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new DisabledBar(123);
         }
     }
 
