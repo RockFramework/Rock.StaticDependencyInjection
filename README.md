@@ -64,7 +64,7 @@ class Program
         RunApplication();
     }
     
-    void RunApplication()
+    static void RunApplication()
     {
         // Note that we don't pass an instance of IFoo to the Widget's constructor.
         // The widget will get its IFoo from Foo.Current.
@@ -88,11 +88,17 @@ Wouldn't it be great if, just by declaring a single implementation of `IFoo`, th
 
 Rock.StaticDependencyInjection allows you to do just that. You simply add a nuget package to your library, add a few lines of code, and your library will automatically discover and set the static dependencies that it requires with no intervention from the applications that use it.
 
-This is what composition root of your widget library might look like.
+This is what composition root of your widget library might look like (in CompositionRoot.cs).
 
 ```csharp
 
-ImportSingle<IFoo>(foo => Foo.Current = foo); // Yep, this is it.
+class CompositionRoot
+{
+    public override void Bootstrap()
+    {
+        ImportSingle<IFoo>(foo => Foo.Current = foo); // Yep, this is it.
+    }
+}
 
 ```
 
