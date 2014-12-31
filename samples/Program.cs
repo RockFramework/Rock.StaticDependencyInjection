@@ -1,9 +1,5 @@
 ﻿using System;
-using ExampleApplication;
 using Rock.StaticDependencyInjection;
-
-[assembly: ExportExternal(typeof(MyBaz))]
-[assembly: ExportExternal(typeof(AnotherBaz))]
 
 namespace ExampleApplication
 {

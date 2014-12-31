@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Rock.StaticDependencyInjection
 {
@@ -38,11 +40,11 @@ namespace Rock.StaticDependencyInjection
         }
 
         /// <summary>
-        /// Return a metadata object that describes the export operation for a type.
+        /// Return a collection of metadata objects that describe the export operations for a type.
         /// </summary>
         /// <param name="type">The type to get export metadata.</param>
-        /// <returns>A metadata object that describes an export operation.</returns>
-        protected override ExportInfo GetExportInfo(Type type)
+        /// <returns>A collection of metadata objects that describe export operations.</returns>
+        protected override IEnumerable<ExportInfo> GetExportInfos(Type type)
         {
             // Modify this method if your library needs to support a different
             // export mechanism (possibly a different attribute) that inspects
@@ -51,19 +53,21 @@ namespace Rock.StaticDependencyInjection
             // Remove this method if your library should not support any advanced
             // export mechanisms based on the type of a class.
 
-            var attribute = Attribute.GetCustomAttribute(type, typeof(ExportAttribute)) as ExportAttribute;
+            var attributes = Attribute.GetCustomAttributes(type, typeof(ExportAttribute));
 
-            if (attribute == null)
+            if (attributes.Length == 0)
             {
-                return base.GetExportInfo(type);
+                return base.GetExportInfos(type);
             }
 
             return
-                new ExportInfo(type, attribute.Priority)
-                {
-                    Disabled = attribute.Disabled,
-                    Name = attribute.Name
-                };
+                attributes.Cast<ExportAttribute>()
+                .Select(attribute =>
+                    new ExportInfo(type, attribute.Priority)
+                    {
+                        Disabled = attribute.Disabled,
+                        Name = attribute.Name
+                    });
         }
         // Rock.StaticDependencyInjection: BEGIN EXAMPLE
         protected override ImportOptions GetDefaultImportOptions()

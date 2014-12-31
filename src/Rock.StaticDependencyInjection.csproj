@@ -47,7 +47,6 @@
     <Compile Include="StaticDependencyInjection\CompositionRootBase.Generated.cs" />
     <Compile Include="StaticDependencyInjection\ExportAttribute.cs" />
     <Compile Include="StaticDependencyInjection\ExportInfo.Generated.cs" />
-    <Compile Include="StaticDependencyInjection\Extensions.Generated.cs" />
     <Compile Include="StaticDependencyInjection\ImportOptions.Generated.cs" />
     <Compile Include="StaticDependencyInjection\ModuleInitializer.cs" />
   </ItemGroup>
