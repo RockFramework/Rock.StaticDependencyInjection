@@ -50,21 +50,6 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
         }
 
         /// <summary>
-        /// Return a collection of metadata objects that correspond to the attributes.
-        /// Use the <see cref="Extensions.AsAttributes{TAttribute}"/> extension method
-        /// to convert applicable CustomAttributeData objects to the desired attribyte type.
-        /// </summary>
-        /// <param name="assemblyAttributeDataCollection">
-        /// The collection of attribute data describing attributes that decorate an assembly.
-        /// </param>
-        /// <returns>A collection of metadata objects that describe export operations.</returns>
-        protected virtual IEnumerable<ExportInfo> GetExportInfos(
-            IEnumerable<CustomAttributeData> assemblyAttributeDataCollection)
-        {
-            yield break;
-        }
-
-        /// <summary>
         /// Return an object that defines various options.
         /// </summary>
         protected virtual ImportOptions GetDefaultImportOptions()
@@ -492,11 +477,6 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
 
             var prioritizedGroupsOfCandidateTypes =
                 candidateTypeNames.SelectMany(GetExportInfos)
-                    .Concat(
-                        LoadExportInfosFromAssemblyAttributes(
-                            import.TargetType,
-                            import.Options.DirectoryPaths,
-                            import.Options.IncludeTypesFromThisAssembly))
                     .Where(export =>
                         export != null
                         && !export.Disabled
@@ -561,52 +541,6 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
             }
 
             return export.Name == import.Name || import.Name == null;
-        }
-
-        private IEnumerable<ExportInfo> LoadExportInfosFromAssemblyAttributes(
-            Type targetType,
-            IEnumerable<string> directoryPaths,
-            bool includeTypesFromThisAssembly)
-        {
-            try
-            {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomainOnReflectionOnlyAssemblyResolve;
-
-                return
-                    GetAssemblyFiles(directoryPaths, includeTypesFromThisAssembly)
-                        .SelectMany(assemblyFile =>
-                            LoadExportInfos(assemblyFile, targetType, includeTypesFromThisAssembly))
-                        .ToList();
-            }
-            finally
-            {
-                AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve -= AppDomainOnReflectionOnlyAssemblyResolve;
-            }
-        }
-
-        private IEnumerable<ExportInfo> LoadExportInfos(
-            string assemblyFile,
-            Type targetType,
-            bool includeTypesFromThisAssembly)
-        {
-            try
-            {
-                var assembly = Assembly.ReflectionOnlyLoadFrom(assemblyFile);
-
-                if (!includeTypesFromThisAssembly
-                    && assembly.FullName == typeof(CompositionRootBase).Assembly.FullName)
-                {
-                    return Enumerable.Empty<ExportInfo>();
-                }
-
-                return
-                    GetExportInfos(CustomAttributeData.GetCustomAttributes(assembly))
-                        .Where(export => export.TargetClass.AssemblyQualifiedName == targetType.AssemblyQualifiedName);
-            }
-            catch
-            {
-                return Enumerable.Empty<ExportInfo>();
-            }
         }
 
         private static Type ChooseCandidateType(

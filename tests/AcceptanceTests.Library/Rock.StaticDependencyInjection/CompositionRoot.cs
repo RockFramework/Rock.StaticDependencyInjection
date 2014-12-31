@@ -641,20 +641,6 @@ namespace Rock.StaticDependencyInjection.AcceptanceTests.Library.Rock.StaticDepe
                     });
         }
 
-        protected override IEnumerable<ExportInfo> GetExportInfos(
-            IEnumerable<CustomAttributeData> assemblyAttributeDataCollection)
-        {
-            return
-                assemblyAttributeDataCollection.AsAttributes<ExportExternalAttribute>()
-                    .Where(attribute => attribute.IsValidForAssemblyAttribute)
-                    .Select(attribute =>
-                        new ExportInfo(attribute.ClassType, attribute.Priority)
-                        {
-                            Disabled = attribute.Disabled,
-                            Name = attribute.Name
-                        });
-        }
-
         private class ReversedTargetClassAssemblyQualifiedNameComparer : IComparer<ExportInfo>
         {
             public int Compare(ExportInfo lhs, ExportInfo rhs)
