@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StaticDependencyInjection\Default.Generated.cs" />
     <Compile Include="Tests\AbstractDependencies.cs" />
     <Compile Include="Tests\ConcreteDependencies.cs" />
     <Compile Include="ExampleDomain.cs" />
