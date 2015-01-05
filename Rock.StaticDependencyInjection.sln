@@ -5,7 +5,9 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.StaticDependencyInjection", "src\Rock.StaticDependencyInjection.csproj", "{3B90F15B-2356-4C03-BB44-88DE40B65593}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.StaticDependencyInjection.Tests", "tests\AcceptanceTests\Rock.StaticDependencyInjection.Tests.csproj", "{AB96E354-FEA2-444D-84EC-E952635AB648}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.StaticDependencyInjection.Tests", "tests\Tests\Rock.StaticDependencyInjection.Tests.csproj", "{AB96E354-FEA2-444D-84EC-E952635AB648}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rock.StaticDependencyInjection.ConfigDisabledTests", "tests\ConfigDisabledTests\Rock.StaticDependencyInjection.ConfigDisabledTests.csproj", "{EAE7CC3C-76DC-4831-8A20-1505EFBF5D77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{AB96E354-FEA2-444D-84EC-E952635AB648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB96E354-FEA2-444D-84EC-E952635AB648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB96E354-FEA2-444D-84EC-E952635AB648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAE7CC3C-76DC-4831-8A20-1505EFBF5D77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAE7CC3C-76DC-4831-8A20-1505EFBF5D77}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAE7CC3C-76DC-4831-8A20-1505EFBF5D77}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAE7CC3C-76DC-4831-8A20-1505EFBF5D77}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

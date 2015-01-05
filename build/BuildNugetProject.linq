@@ -121,7 +121,7 @@ private static IEnumerable<FileTemplate> GetNonGeneratedFileTemplates(string dir
 {
     foreach (var path in Directory.GetFiles(directory, "*.cs").Where(path => !path.Contains(".Generated")).OrderBy(x => Path.GetFileName(x)))
     {
-        var contents = new StringBuilder();
+        var sb = new StringBuilder();
     
         var skip = false;
         
@@ -146,17 +146,16 @@ private static IEnumerable<FileTemplate> GetNonGeneratedFileTemplates(string dir
                 }
                 else
                 {
-                    if (line == "namespace Rock.StaticDependencyInjection")
-                    {
-                        contents.AppendLine("namespace $rootnamespace$.Rock.StaticDependencyInjection");
-                    }
-                    else
-                    {
-                        contents.AppendLine(line);
-                    }
+                    sb.AppendLine(line);
                 }
             }
         }
+        
+        var contents =
+            sb.ToString()
+                .Replace(
+                    "Rock.StaticDependencyInjection",
+                    "$rootnamespace$.Rock.StaticDependencyInjection");
         
         yield return
             new FileTemplate

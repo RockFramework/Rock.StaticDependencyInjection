@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 // Rock.StaticDependencyInjection: BEGIN EXAMPLE
 using Rock.StaticDependencyInjection.Tests;
@@ -19,6 +20,19 @@ namespace Rock.StaticDependencyInjection
             // Rock.StaticDependencyInjection: BEGIN EXAMPLE
             ImportForAcceptanceTests();
             // Rock.StaticDependencyInjection: END EXAMPLE
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether static dependency injection is enabled.
+        /// </summary>
+        public override bool IsEnabled
+        {
+            get
+            {
+                const string key = "Rock.StaticDependencyInjection.Enabled";
+                var enabledValue = ConfigurationManager.AppSettings.Get(key) ?? "true";
+                return enabledValue.ToLower() != "false";
+            }
         }
 
         /// <summary>

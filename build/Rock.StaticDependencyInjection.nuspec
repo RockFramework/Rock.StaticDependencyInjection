@@ -13,6 +13,9 @@
         <description>Magic. Unicorns. Static dependency injection.</description>
         <summary>Magic. Unicorns. Static dependency injection.</summary>
         <tags>magic unicorns static dependency injection</tags>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System.Configuration" />
+        </frameworkAssemblies>
     </metadata>
     <files>
         <file src="..\..\lib\InjectModuleInitializer.exe" target="tools\InjectModuleInitializer.exe" />

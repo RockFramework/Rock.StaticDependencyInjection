@@ -21,7 +21,12 @@ namespace Rock.StaticDependencyInjection
     {
         internal static void Run()
         {
-            new CompositionRoot().Bootstrap();
+            var compositionRoot = new CompositionRoot();
+
+            if (compositionRoot.IsEnabled)
+            {
+                compositionRoot.Bootstrap();
+            }
         }
     }
 }

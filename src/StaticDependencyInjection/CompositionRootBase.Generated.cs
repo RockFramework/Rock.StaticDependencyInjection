@@ -27,6 +27,14 @@ namespace Rock.StaticDependencyInjection
         public abstract void Bootstrap();
 
         /// <summary>
+        /// Gets a value indicating whether static dependency injection is enabled.
+        /// </summary>
+        public virtual bool IsEnabled
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Return a collection of metadata objects that describe the export operations for a type.
         /// </summary>
         /// <param name="type">The type to get export metadata.</param>
