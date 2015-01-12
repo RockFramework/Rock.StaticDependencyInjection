@@ -12,8 +12,13 @@
 //    - The method must be marked as static.
 //    - The method must return void.
 //    - The method must take no arguments.
-//  - The Run method must contain the following line:
-//        new CompositionRoot().Bootstrap();
+//  - The Run method must contain the following lines:
+//        var compositionRoot = new CompositionRoot();
+//
+//        if (compositionRoot.IsEnabled)
+//        {
+//            compositionRoot.Bootstrap();
+//        }
 
 namespace Rock.StaticDependencyInjection
 {
