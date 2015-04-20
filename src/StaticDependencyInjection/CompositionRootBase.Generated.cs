@@ -706,6 +706,11 @@ namespace Rock.StaticDependencyInjection
         {
             foreach (var directoryPath in directoryPaths)
             {
+                if (!Directory.Exists(directoryPath))
+                {
+                    continue;
+                }
+
                 IEnumerable<string> dllFiles;
 
                 try
