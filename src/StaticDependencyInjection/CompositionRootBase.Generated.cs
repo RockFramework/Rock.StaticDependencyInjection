@@ -748,7 +748,7 @@ namespace Rock.StaticDependencyInjection
                 }
 
                 return
-                    assembly.GetTypes()
+                    GetTypesSafely(assembly)
                         .Where(t =>
                             t.IsClass
                             && !t.IsAbstract
@@ -758,6 +758,18 @@ namespace Rock.StaticDependencyInjection
             catch
             {
                 return Enumerable.Empty<Type>();
+            }
+        }
+
+        private static Type[] GetTypesSafely(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes().ToArray();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                return ex.Types.Where(t => t != null).ToArray();
             }
         }
 
