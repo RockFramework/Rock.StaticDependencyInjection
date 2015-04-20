@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Rock.StaticDependencyInjection
@@ -78,7 +79,11 @@ namespace Rock.StaticDependencyInjection
         /// </summary>
         private static string[] GetDefaultDirectoryPaths()
         {
-            return new[] { AppDomain.CurrentDomain.BaseDirectory };
+            return new[]
+            {
+                AppDomain.CurrentDomain.BaseDirectory,
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin")
+            };
         }
 
         /// <summary>
