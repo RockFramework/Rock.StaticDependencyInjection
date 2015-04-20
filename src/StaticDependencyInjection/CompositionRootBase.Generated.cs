@@ -766,15 +766,15 @@ namespace Rock.StaticDependencyInjection
             }
         }
 
-        private static Type[] GetTypesSafely(Assembly assembly)
+        private static IEnumerable<Type> GetTypesSafely(Assembly assembly)
         {
             try
             {
-                return assembly.GetTypes().ToArray();
+                return assembly.GetTypes();
             }
             catch (ReflectionTypeLoadException ex)
             {
-                return ex.Types.Where(t => t != null).ToArray();
+                return ex.Types.Where(t => t != null);
             }
         }
 
