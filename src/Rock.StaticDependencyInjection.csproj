@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="StaticDependencyInjection\Default.Generated.cs" />
+    <Compile Include="StaticDependencyInjection\ImportInfo.Generated.cs" />
     <Compile Include="Tests\AbstractDependencies.cs" />
     <Compile Include="Tests\ConcreteDependencies.cs" />
     <Compile Include="ExampleDomain.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="StaticDependencyInjection\ExportInfo.Generated.cs" />
     <Compile Include="StaticDependencyInjection\ImportOptions.Generated.cs" />
     <Compile Include="StaticDependencyInjection\ModuleInitializer.cs" />
+    <Compile Include="Tests\HandledErrors.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="InjectModuleInitializer" AfterTargets="AfterBuild">

@@ -45,6 +45,7 @@
     <Compile Include="BadDependencyTests.cs" />
     <Compile Include="ConcreteServices.cs" />
     <Compile Include="DuplicateExportTests.cs" />
+    <Compile Include="ImportActionExceptionTests.cs" />
     <Compile Include="ImportMultipleTests.cs" />
     <Compile Include="ImportFirstTests.cs" />
     <Compile Include="ImportOptionsParameterTests.cs" />

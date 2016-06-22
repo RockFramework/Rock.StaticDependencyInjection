@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Rock.StaticDependencyInjection
 {
@@ -71,6 +72,28 @@ namespace Rock.StaticDependencyInjection
             {
                 _exportComparer = value ?? GetDefaultExportComparer();
             }
+        }
+
+        public override string ToString()
+        {
+            return ToString("");
+        }
+
+        internal string ToString(string indent)
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendFormat(@"{{
+{6}  ""AllowNonPublicClasses"": {0},
+{6}  ""IncludeNamedExportsFromUnnamedImports"": {1},
+{6}  ""PreferTTargetType"": {2},
+{6}  ""IncludeTypesFromThisAssembly"": {3},
+{6}  ""DirectoryPaths"": [{4}],
+{6}  ""ExportComparer"": ""{5}""
+{6}}}", AllowNonPublicClasses, IncludeNamedExportsFromUnnamedImports, PreferTTargetType,
+   IncludeTypesFromThisAssembly, string.Join(",", DirectoryPaths), ExportComparer.GetType(), indent);
+
+            return sb.ToString();
         }
 
         /// <summary>

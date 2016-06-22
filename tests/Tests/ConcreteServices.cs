@@ -808,21 +808,39 @@ namespace Rock.StaticDependencyInjection.Tests
 
     #region Dependencies That Throw During Construction
 
-    [Export(-500, Name = DiscoveredDependency.FooBadConstructor)]
-    public class FooBadConstructor : IFoo
+    [Export(-500, Name = DiscoveredDependency.FooBadConstructor1)]
+    internal class FooBadConstructor1 : IFoo
     {
-        public FooBadConstructor()
+        public FooBadConstructor1()
         {
-            throw new Exception("Bad things happened.");
+            throw new Exception(DiscoveredDependency.FooBadConstructor1);
         }
     }
 
-    [Export(-500, Name = DiscoveredDependency.BarFactoryBadConstructor)]
-    public class BarFactoryBadConstructor : IBarFactory
+    [Export(-500, Name = DiscoveredDependency.FooBadConstructor2)]
+    internal class FooBadConstructor2 : IFoo
     {
-        public BarFactoryBadConstructor()
+        public FooBadConstructor2()
         {
-            throw new Exception("Bad things happened.");
+            throw new Exception(DiscoveredDependency.FooBadConstructor2);
+        }
+    }
+
+    [Export(-500, Name = DiscoveredDependency.FooBadConstructor3)]
+    internal class FooBadConstructor3 : IFoo
+    {
+        public FooBadConstructor3()
+        {
+            throw new Exception(DiscoveredDependency.FooBadConstructor3);
+        }
+    }
+
+    [Export(-500, Name = DiscoveredDependency.BarFactoryBadConstructor1)]
+    internal class BarFactoryBadConstructor1 : IBarFactory
+    {
+        public BarFactoryBadConstructor1()
+        {
+            throw new Exception(DiscoveredDependency.BarFactoryBadConstructor1);
         }
 
         public IBar GetBar()
@@ -831,12 +849,178 @@ namespace Rock.StaticDependencyInjection.Tests
         }
     }
 
-    [Export(-500, Name = DiscoveredDependency.BarFactoryBadMethod)]
-    public class BarFactoryBadMethod : IBarFactory
+    [Export(-500, Name = DiscoveredDependency.BarFactoryBadConstructor2)]
+    internal class BarFactoryBadConstructor2 : IBarFactory
+    {
+        public BarFactoryBadConstructor2()
+        {
+            throw new Exception(DiscoveredDependency.BarFactoryBadConstructor2);
+        }
+
+        public IBar GetBar()
+        {
+            return new AbcBar(123);
+        }
+    }
+
+    [Export(-500, Name = DiscoveredDependency.BarFactoryBadConstructor3)]
+    internal class BarFactoryBadConstructor3 : IBarFactory
+    {
+        public BarFactoryBadConstructor3()
+        {
+            throw new Exception(DiscoveredDependency.BarFactoryBadConstructor3);
+        }
+
+        public IBar GetBar()
+        {
+            return new AbcBar(123);
+        }
+    }
+
+    [Export(-500, Name = DiscoveredDependency.BarFactoryBadMethod1)]
+    internal class BarFactoryBadMethod1 : IBarFactory
     {
         public IBar GetBar()
         {
-            throw new Exception("Bad things happened.");
+            throw new Exception(DiscoveredDependency.BarFactoryBadMethod1);
+        }
+    }
+
+    [Export(-500, Name = DiscoveredDependency.BarFactoryBadMethod2)]
+    internal class BarFactoryBadMethod2 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            throw new Exception(DiscoveredDependency.BarFactoryBadMethod2);
+        }
+    }
+
+    [Export(-500, Name = DiscoveredDependency.BarFactoryBadMethod3)]
+    internal class BarFactoryBadMethod3 : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            throw new Exception(DiscoveredDependency.BarFactoryBadMethod3);
+        }
+    }
+
+    #endregion
+
+    #region Exports For Import Action Exceptions
+
+    [Export(Name = DiscoveredDependency.ImportSingleImportActionExceptionIFoo)]
+    internal class ImportSingleImportActionExceptionFooImplementation : IFoo
+    {
+    }
+
+    internal class ImportSingleImportActionExceptionBarImplementation : IBar
+    {
+        private readonly int _value;
+
+        public ImportSingleImportActionExceptionBarImplementation(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Name = DiscoveredDependency.ImportSingleImportActionExceptionIBarIBarFactory)]
+    internal class ImportSingleImportActionExceptionBarFactoryImplementation : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new NamedBarImplementation(123);
+        }
+    }
+
+    [Export(Name = DiscoveredDependency.ImportFirstImportActionExceptionIFoo)]
+    internal class ImportFirstImportActionExceptionFooImplementation : IFoo
+    {
+    }
+
+    internal class ImportFirstImportActionExceptionBarImplementation : IBar
+    {
+        private readonly int _value;
+
+        public ImportFirstImportActionExceptionBarImplementation(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Name = DiscoveredDependency.ImportFirstImportActionExceptionIBarIBarFactory)]
+    internal class ImportFirstImportActionExceptionBarFactoryImplementation : IBarFactory
+    {
+        public IBar GetBar()
+        {
+            return new NamedBarImplementation(123);
+        }
+    }
+
+    [Export(Name = DiscoveredDependency.ImportMultipleImportActionExceptionIBaz)]
+    internal class ImportMultipleImportActionExceptionBazImplementation1 : IBaz
+    {
+    }
+
+    [Export(Name = DiscoveredDependency.ImportMultipleImportActionExceptionIBaz)]
+    internal class ImportMultipleImportActionExceptionBazImplementation2 : IBaz
+    {
+    }
+
+    internal class ImportMultipleImportActionExceptionQuxImplementation1 : IQux
+    {
+        private readonly int _value;
+
+        public ImportMultipleImportActionExceptionQuxImplementation1(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    internal class ImportMultipleImportActionExceptionQuxImplementation2 : IQux
+    {
+        private readonly int _value;
+
+        public ImportMultipleImportActionExceptionQuxImplementation2(int value)
+        {
+            _value = value;
+        }
+
+        public int Value
+        {
+            get { return _value; }
+        }
+    }
+
+    [Export(Name = DiscoveredDependency.ImportMultipleImportActionExceptionIQuxIQuxFactory)]
+    internal class ImportMultipleImportActionExceptionQuxFactoryImplementation1 : IQuxFactory
+    {
+        public IQux GetQux()
+        {
+            return new NamedQuxImplementation1(123);
+        }
+    }
+
+    [Export(Name = DiscoveredDependency.ImportMultipleImportActionExceptionIQuxIQuxFactory)]
+    internal class ImportMultipleImportActionExceptionQuxFactoryImplementation2 : IQuxFactory
+    {
+        public IQux GetQux()
+        {
+            return new NamedQuxImplementation2(123);
         }
     }
 

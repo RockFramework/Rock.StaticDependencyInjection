@@ -133,15 +133,28 @@ namespace Rock.StaticDependencyInjection.Tests
         public const string ImportMultipleIFooNonDefaultConstructor = "ImportMultiple<IFoo>(NonDefaultConstructor)";
         public const string ImportMultipleIBarIBarFactoryNonDefaultConstructor = "ImportMultiple<IBar, IBarFactory>(NonDefaultConstructor)";
 
-        public const string FooBadConstructor = "FooBadConstructor";
-        public const string BarFactoryBadConstructor = "BarFactoryBadConstructor";
-        public const string BarFactoryBadMethod = "BarFactoryBadMethod";
+        public const string FooBadConstructor1 = "FooBadConstructor1";
+        public const string FooBadConstructor2 = "FooBadConstructor2";
+        public const string FooBadConstructor3 = "FooBadConstructor3";
+        public const string BarFactoryBadConstructor1 = "BarFactoryBadConstructor1";
+        public const string BarFactoryBadConstructor2 = "BarFactoryBadConstructor2";
+        public const string BarFactoryBadConstructor3 = "BarFactoryBadConstructor3";
+        public const string BarFactoryBadMethod1 = "BarFactoryBadMethod1";
+        public const string BarFactoryBadMethod2 = "BarFactoryBadMethod2";
+        public const string BarFactoryBadMethod3 = "BarFactoryBadMethod3";
         public const string ImportSingleIFooBadDependency = "ImportSingle<IFoo>(BadDependency)";
         public const string ImportSingleIBarIBarFactoryBadDependency = "ImportSingle<IBar, IBarFactory>(BadDependency)";
         public const string ImportFirstIFooBadDependency = "ImportFirst<IFoo>(BadDependency)";
         public const string ImportFirstIBarIBarFactoryBadDependency = "ImportFirst<IBar, IBarFactory>(BadDependency)";
         public const string ImportMultipleIFooBadDependency = "ImportMultiple<IFoo>(BadDependency)";
         public const string ImportMultipleIBarIBarFactoryBadDependency = "ImportMultiple<IBar, IBarFactory>(BadDependency)";
+
+        public const string ImportSingleImportActionExceptionIFoo = "ImportSingleImportActionExceptionIFoo";
+        public const string ImportSingleImportActionExceptionIBarIBarFactory = "ImportSingleImportActionExceptionIBarIBarFactory";
+        public const string ImportFirstImportActionExceptionIFoo = "ImportFirstImportActionExceptionIFoo";
+        public const string ImportFirstImportActionExceptionIBarIBarFactory = "ImportFirstImportActionExceptionIBarIBarFactory";
+        public const string ImportMultipleImportActionExceptionIBaz = "ImportMultipleImportActionExceptionIBaz";
+        public const string ImportMultipleImportActionExceptionIQuxIQuxFactory = "ImportMultipleImportActionExceptionIQuxIQuxFactory";
 
         public const string Disabled = "Disabled";
         public const string ImportSingleIFooDisabled = "ImportSingle<IFoo>(Disabled)";

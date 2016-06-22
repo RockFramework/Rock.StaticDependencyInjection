@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 // Rock.StaticDependencyInjection: BEGIN EXAMPLE
+using System.Reflection;
 using Rock.StaticDependencyInjection.Tests;
 // Rock.StaticDependencyInjection: END EXAMPLE
 
@@ -66,6 +67,18 @@ namespace Rock.StaticDependencyInjection
                     });
         }
         // Rock.StaticDependencyInjection: BEGIN EXAMPLE
+        protected override void OnError(string message, Exception exception, ImportInfo import)
+        {
+            if (exception is TargetInvocationException)
+            {
+                exception = exception.InnerException;
+            }
+
+            HandledErrors.Add(message, exception, import);
+
+            base.OnError(message, exception, import);
+        }
+
         private void ImportForAcceptanceTests()
         {
             ImportSingleTests_GivenASingleImplementationForTheAbstraction_ThenThatImplementationIsUsed();
@@ -93,6 +106,7 @@ namespace Rock.StaticDependencyInjection
             DuplicateExportTests();
             NonDefaultConstructorTests();
             BadDependencyTests();
+            ImportActionExceptionTests();
             DisabledExportTests();
         }
 
@@ -608,47 +622,96 @@ namespace Rock.StaticDependencyInjection
 
         private void BadDependencyTests()
         {
+            var options = new ImportOptions { AllowNonPublicClasses = true };
+
             ImportSingle<IFoo>(
-                foo => DiscoveredDependency.Register(foo, DiscoveredDependency.ImportSingleIFooBadDependency + ":" + DiscoveredDependency.FooBadConstructor),
-                DiscoveredDependency.FooBadConstructor);
+                foo => DiscoveredDependency.Register(foo, DiscoveredDependency.ImportSingleIFooBadDependency + ":" + DiscoveredDependency.FooBadConstructor1),
+                DiscoveredDependency.FooBadConstructor1,
+                options);
 
             ImportSingle<IBar, IBarFactory>(
-                bar => DiscoveredDependency.Register(bar, DiscoveredDependency.ImportSingleIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadConstructor),
+                bar => DiscoveredDependency.Register(bar, DiscoveredDependency.ImportSingleIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadConstructor1),
                 factory => factory.GetBar(),
-                DiscoveredDependency.BarFactoryBadConstructor);
+                DiscoveredDependency.BarFactoryBadConstructor1,
+                options);
 
             ImportSingle<IBar, IBarFactory>(
-                bar => DiscoveredDependency.Register(bar, DiscoveredDependency.ImportSingleIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadMethod),
+                bar => DiscoveredDependency.Register(bar, DiscoveredDependency.ImportSingleIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadMethod1),
                 factory => factory.GetBar(),
-                DiscoveredDependency.BarFactoryBadMethod);
+                DiscoveredDependency.BarFactoryBadMethod1,
+                options);
 
             ImportFirst<IFoo>(
-                foo => DiscoveredDependency.Register(foo, DiscoveredDependency.ImportFirstIFooBadDependency + ":" + DiscoveredDependency.FooBadConstructor),
-                DiscoveredDependency.FooBadConstructor);
+                foo => DiscoveredDependency.Register(foo, DiscoveredDependency.ImportFirstIFooBadDependency + ":" + DiscoveredDependency.FooBadConstructor2),
+                DiscoveredDependency.FooBadConstructor2,
+                options);
 
             ImportFirst<IBar, IBarFactory>(
-                bar => DiscoveredDependency.Register(bar, DiscoveredDependency.ImportFirstIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadConstructor),
+                bar => DiscoveredDependency.Register(bar, DiscoveredDependency.ImportFirstIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadConstructor2),
                 factory => factory.GetBar(),
-                DiscoveredDependency.BarFactoryBadConstructor);
+                DiscoveredDependency.BarFactoryBadConstructor2,
+                options);
 
             ImportFirst<IBar, IBarFactory>(
-                bar => DiscoveredDependency.Register(bar, DiscoveredDependency.ImportFirstIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadMethod),
+                bar => DiscoveredDependency.Register(bar, DiscoveredDependency.ImportFirstIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadMethod2),
                 factory => factory.GetBar(),
-                DiscoveredDependency.BarFactoryBadMethod);
+                DiscoveredDependency.BarFactoryBadMethod2,
+                options);
 
             ImportMultiple<IFoo>(
-                foos => DiscoveredDependency.Register(foos, DiscoveredDependency.ImportMultipleIFooBadDependency + ":" + DiscoveredDependency.FooBadConstructor),
-                DiscoveredDependency.FooBadConstructor);
+                foos => DiscoveredDependency.Register(foos, DiscoveredDependency.ImportMultipleIFooBadDependency + ":" + DiscoveredDependency.FooBadConstructor3),
+                DiscoveredDependency.FooBadConstructor3,
+                options);
 
             ImportMultiple<IBar, IBarFactory>(
-                bars => DiscoveredDependency.Register(bars, DiscoveredDependency.ImportMultipleIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadConstructor),
+                bars => DiscoveredDependency.Register(bars, DiscoveredDependency.ImportMultipleIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadConstructor3),
                 factory => factory.GetBar(),
-                DiscoveredDependency.BarFactoryBadConstructor);
+                DiscoveredDependency.BarFactoryBadConstructor3,
+                options);
 
             ImportMultiple<IBar, IBarFactory>(
-                bars => DiscoveredDependency.Register(bars, DiscoveredDependency.ImportMultipleIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadMethod),
+                bars => DiscoveredDependency.Register(bars, DiscoveredDependency.ImportMultipleIBarIBarFactoryBadDependency + ":" + DiscoveredDependency.BarFactoryBadMethod3),
                 factory => factory.GetBar(),
-                DiscoveredDependency.BarFactoryBadMethod);
+                DiscoveredDependency.BarFactoryBadMethod3,
+                options);
+        }
+
+        private void ImportActionExceptionTests()
+        {
+            var options = new ImportOptions { AllowNonPublicClasses = true };
+
+            ImportSingle<IFoo>(
+                foo => { throw new Exception(DiscoveredDependency.ImportSingleImportActionExceptionIFoo); },
+                DiscoveredDependency.ImportSingleImportActionExceptionIFoo,
+                options);
+
+            ImportSingle<IBar, IBarFactory>(
+                bar => { throw new Exception(DiscoveredDependency.ImportSingleImportActionExceptionIBarIBarFactory); },
+                factory => factory.GetBar(),
+                DiscoveredDependency.ImportSingleImportActionExceptionIBarIBarFactory,
+                options);
+
+            ImportFirst<IFoo>(
+                foo => { throw new Exception(DiscoveredDependency.ImportFirstImportActionExceptionIFoo); },
+                DiscoveredDependency.ImportFirstImportActionExceptionIFoo,
+                options);
+
+            ImportFirst<IBar, IBarFactory>(
+                bar => { throw new Exception(DiscoveredDependency.ImportFirstImportActionExceptionIBarIBarFactory); },
+                factory => factory.GetBar(),
+                DiscoveredDependency.ImportFirstImportActionExceptionIBarIBarFactory,
+                options);
+
+            ImportMultiple<IBaz>(
+                foos => { throw new Exception(DiscoveredDependency.ImportMultipleImportActionExceptionIBaz); },
+                DiscoveredDependency.ImportMultipleImportActionExceptionIBaz,
+                options);
+
+            ImportMultiple<IQux, IQuxFactory>(
+                bars => { throw new Exception(DiscoveredDependency.ImportMultipleImportActionExceptionIQuxIQuxFactory); },
+                factory => factory.GetQux(),
+                DiscoveredDependency.ImportMultipleImportActionExceptionIQuxIQuxFactory,
+                options);
         }
 
         private void DisabledExportTests()
