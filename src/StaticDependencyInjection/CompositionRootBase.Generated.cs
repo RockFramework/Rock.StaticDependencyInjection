@@ -44,6 +44,7 @@ namespace Rock.StaticDependencyInjection
         /// <param name="import">An <see cref="ImportInfo"/> object that describes the import operation that failed.</param>
         protected virtual void OnError(string message, Exception exception, ImportInfo import)
         {
+#if DEBUG
             var sb = new StringBuilder();
 
             if (message != null)
@@ -63,6 +64,7 @@ namespace Rock.StaticDependencyInjection
 
             var debugMessage = sb.ToString();
             Debug.WriteLine(debugMessage);
+#endif
         }
 
         /// <summary>
